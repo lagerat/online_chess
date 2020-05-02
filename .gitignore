@@ -21,4 +21,5 @@ CMakeLists.txt
 .idea
 cmake-build-debug
 main
-board.txt
+bin/board.txt
+.clang-format

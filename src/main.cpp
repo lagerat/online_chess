@@ -1,7 +1,9 @@
-#include <iostream>
+#include <stdio.h>
+#include <string>
+#include "board.h"
 
 int main()
 {
-    std::cout << "Hello, World!" << std::endl;
+    char[9][9];
     return 0;
 }
