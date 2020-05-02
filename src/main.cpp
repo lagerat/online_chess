@@ -5,6 +5,6 @@
 
 int main()
 {
-    board();
+    if (board() == 1)printf("error");
     return 0;
 }

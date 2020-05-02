@@ -3,5 +3,4 @@
 
 #endif // CHESS_BOARD_H
 
-
-void board();
+int board();
