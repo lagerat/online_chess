@@ -2,8 +2,9 @@
 #include <string>
 #include "board.h"
 
+
 int main()
 {
-    char[9][9];
+    board();
     return 0;
 }
