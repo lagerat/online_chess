@@ -36,16 +36,7 @@ int board()
             k++;
         }
     }
-    char board[8][8];
-    for (int i = 0; i < 8; ++i) {
-        for (int j = 0; j < 8; ++j) {
-            board[i][j] = ' ';
-        }
-    }
-    for (int i = 0; i < 16; ++i) {
-        board[black[i].y][black[i].x] = black[i].name;
-        board[white[i].y][white[i].x] = white[i].name;
-    }
+
 
     FILE* notation;
     if ((notation = fopen("..//bin//notation.txt", "r+")) == NULL) {
@@ -62,6 +53,12 @@ int board()
             printf("figure\n");
         else
             WPawnMoves(str, white, black);
+    }
+    char board[8][8];
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            board[i][j] = ' ';
+        }
     }
     for (int i = 0; i < 16; ++i) {
         board[black[i].y][black[i].x] = black[i].name;

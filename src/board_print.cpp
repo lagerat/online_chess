@@ -10,8 +10,9 @@ int boardPrint(char a[][8])
         printf("Cannot create file.\n");
         return 1;
     }
+    int numbers = 8;
     for (int i = 0; i < 8; ++i) {
-        fprintf(boardField, "%d", i + 1);
+        fprintf(boardField, "%d", numbers--);
         for (int j = 0; j < 8; ++j) {
             fprintf(boardField," %c",a[i][j]);
         }
