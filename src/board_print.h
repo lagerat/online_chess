@@ -1,7 +1,6 @@
 #ifndef CHESS_BOARD_PRINT_H
 #define CHESS_BOARD_PRINT_H
 
-#endif // CHESS_BOARD_PRINT_H
 #include "board.h"
 
 typedef struct figure {
@@ -11,5 +10,5 @@ typedef struct figure {
     char alive;
 } figure;
 
-
 int boardPrint(char a[][8]);
+#endif // CHESS_BOARD_PRINT_H

@@ -13,14 +13,18 @@
 # .nfs files are created when an open file is removed but is still being accessed
 .nfs*
 
-# End of https://www.gitignore.io/api/linux
-
 *.o
 
 CMakeLists.txt
+
 .idea
+
 cmake-build-debug
-main
+
+bin/main
+
 bin/board.txt
+
 .clang-format
+
 bin/notation.txt
