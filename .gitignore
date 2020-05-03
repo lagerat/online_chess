@@ -23,3 +23,4 @@ cmake-build-debug
 main
 bin/board.txt
 .clang-format
+bin/notation.txt
