@@ -8,6 +8,7 @@ typedef struct figure {
     char name;
     int x, y;
     char flag;
+    char alive;
 } figure;
 
 

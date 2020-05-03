@@ -1,6 +1,7 @@
 #include "board.h"
 #include "board_print.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 int WPawnMoves(char str[20], figure* white, figure* black);
 int defenitionX(char symbol);
@@ -18,6 +19,7 @@ int board()
             black[k].y = i;
             black[k].x = j;
             black[k].flag = 0;
+            black[k].alive = 1;
             black[k].name = namesBlack[count];
             if (count < 8)
                 count++;
@@ -30,13 +32,13 @@ int board()
             white[k].y = i;
             white[k].x = j;
             white[k].flag = 0;
+            white[k].alive = 1;
             white[k].name = namesWhite[count];
             if (count < 8)
                 count++;
             k++;
         }
     }
-
 
     FILE* notation;
     if ((notation = fopen("..//bin//notation.txt", "r+")) == NULL) {
@@ -61,8 +63,10 @@ int board()
         }
     }
     for (int i = 0; i < 16; ++i) {
-        board[black[i].y][black[i].x] = black[i].name;
-        board[white[i].y][white[i].x] = white[i].name;
+        if (black[i].alive)
+            board[black[i].y][black[i].x] = black[i].name;
+        if (white[i].alive)
+            board[white[i].y][white[i].x] = white[i].name;
     }
     boardPrint(board);
 }
@@ -81,24 +85,48 @@ int WPawnMoves(char str[20], figure* white, figure* black)
         xNew = defenitionX(symbol);
         symbol = str[k++];
         yNew = defenitionY(symbol);
-        printf("%d %d",xNew,yNew);
-        int c;
+        int c = 100;
         for (int i = 0; i < 16; ++i) {
             if (white[i].x == x && white[i].y == y)
                 c = i;
-            if (black[i].x == xNew && black[i].y == yNew)
-                return 1;
+            if ((black[i].x == xNew && black[i].y == yNew)
+                || (white[i].x == xNew && white[i].y == yNew))
+                return 3;
         }
-        if ((x - xNew != 0)|| ((white[c].flag != 0) && (y - yNew > 1)))
+        if (c == 100)
+            return 6;
+        if ((x - xNew != 0) || ((white[c].flag != 0) && (y - yNew > 1)))
             return 1;
-        if( ((y - yNew == 2) && (white[c].flag == 0))||(y-yNew == 1)){
+        if (((y - yNew == 2) && (white[c].flag == 0)) || (y - yNew == 1)) {
             white[c].flag = 1;
             white[c].y = yNew;
             white[c].x = xNew;
         }
 
     } else if (str[k - 1] == 'x') {
-    }
+        symbol = str[k++];
+        xNew = defenitionX(symbol);
+        symbol = str[k++];
+        yNew = defenitionY(symbol);
+        int c = 100, p = 100;
+        if ((abs(x - xNew) != 1) || (y - yNew != 1))
+            return 4;
+        for (int i = 0; i < 16; ++i) {
+            if (white[i].x == x && white[i].y == y)
+                c = i;
+            if (white[i].x == xNew && white[i].y == yNew)
+                return 3;
+            if ((black[i].x == xNew && black[i].y == yNew))
+                p = i;
+        }
+        if (p == 100 || c == 100)
+            return 6;
+        white[c].x = xNew;
+        white[c].y = yNew;
+        white[c].flag = 1;
+        black[c].alive = 0;
+    } else
+        return 5;
 }
 
 int defenitionX(char symbol)
@@ -130,7 +158,7 @@ int defenitionX(char symbol)
         x = 7;
         break;
     default:
-        return 1;
+        return 8;
     }
     return x;
 }
@@ -164,7 +192,7 @@ int defenitionY(char symbol)
         y = 0;
         break;
     default:
-        return 1;
+        return 8;
     }
     return y;
 }
