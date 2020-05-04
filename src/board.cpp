@@ -115,6 +115,15 @@ int WPawnMoves(char str[20], figure* white, figure* black)
             return 6;
         if ((x - xNew != 0) || ((white[c].flag != 0) && (y - yNew > 1)))
             return 1;
+        if (y - yNew == 2) {
+            int between = y - 1;
+            for (int i = 0; i < 16; ++i) {
+                if (white[i].x == x && white[i].y == between)
+                    return 7;
+                if (black[i].x == x && black[i].y == between)
+                    return 7;
+            }
+        }
         if (((y - yNew == 2) && (white[c].flag == 0)) || (y - yNew == 1)) {
             white[c].flag = 1;
             white[c].y = yNew;
@@ -173,6 +182,15 @@ int BPawnMoves(char str[20], figure* white, figure* black, int p)
             return 6;
         if ((x - xNew != 0) || ((black[c].flag != 0) && (yNew - y > 1)))
             return 1;
+        if (yNew - y == 2) {
+            int between = yNew - 1;
+            for (int i = 0; i < 16; ++i) {
+                if (white[i].x == x && white[i].y == between)
+                    return 7;
+                if (black[i].x == x && black[i].y == between)
+                    return 7;
+            }
+        }
         if (((yNew - y == 2) && (black[c].flag == 0)) || (yNew - y == 1)) {
             black[c].flag = 1;
             black[c].y = yNew;
