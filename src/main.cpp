@@ -1,6 +1,6 @@
 #include "board.h"
 #include <stdio.h>
-#include <string>
+#include "board_print.h"
 
 int main()
 {
@@ -26,6 +26,9 @@ int main()
         break;
     case 8:
         printf("out of bounds");
+        break;
+    case 0:
+        printf("All good");
         break;
     }
     return 0;
