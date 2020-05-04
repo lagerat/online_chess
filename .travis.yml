@@ -1,3 +1,7 @@
+language: c
+compiler: gcc
+script: make
+
 dist: xenial
 
 script:
