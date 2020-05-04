@@ -13,7 +13,7 @@ int boardPrint(char a[][8])
     for (int i = 0; i < 8; ++i) {
         fprintf(boardField, "%d", numbers--);
         for (int j = 0; j < 8; ++j) {
-            fprintf(boardField," %c",a[i][j]);
+            fprintf(boardField, " %c", a[i][j]);
         }
         fprintf(boardField, "\n");
     }

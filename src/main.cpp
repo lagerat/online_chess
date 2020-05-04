@@ -1,6 +1,6 @@
 #include "board.h"
-#include <stdio.h>
 #include "board_print.h"
+#include <stdio.h>
 
 int main()
 {
@@ -16,13 +16,15 @@ int main()
         printf("wrong pawn capture");
         break;
     case 3:
-        printf("A pawn is trying to go on a testice which is occupide be anither figure");
+        printf("A pawn is trying to go on a testice which is occupide be "
+               "anither figure");
         break;
     case 5:
         printf("unknow type of move");
         break;
     case 6:
-        printf("There is no figure on the testicle that you are trying to take");
+        printf("There is no figure on the testicle that you are trying to "
+               "take");
         break;
     case 8:
         printf("out of bounds");
