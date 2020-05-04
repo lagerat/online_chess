@@ -10,7 +10,8 @@ int defenitionY(char symbol);
 int board()
 {
     char namesBlack[] = {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r', 'p', '\0'};
-    char namesWhite[] = {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R', 'P', '\0'};figure white[16];
+    char namesWhite[] = {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R', 'P', '\0'};
+    figure white[16];
     figure black[16];
     int count = 0;
     int k = 0;
