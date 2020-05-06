@@ -3,10 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int figureType(char str[20], figure* white, figure* black, int p);
+int kingMove(char str[20], figure* white, figure* black, int p);
 int WPawnMoves(char str[20], figure* white, figure* black);
 int BPawnMoves(char str[20], figure* white, figure* black, int p);
 int defenitionX(char symbol);
 int defenitionY(char symbol);
+int status;
 int board()
 {
     char namesBlack[] = {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r', 'p', '\0'};
@@ -46,29 +49,35 @@ int board()
         printf("Cannot open notation file.\n");
         return 1;
     }
+    int p = 0;
+    status = 0;
     char str[20] = "\0";
     while (feof(notation) == 0) {
         fgets(str, 19, notation);
-        if ((str[0] == 'K') || (str[0] == 'Q') || (str[0] == 'R')
-            || (str[0] == 'N') || (str[0] == 'B') || (str[0] == 'k')
-            || (str[0] == 'q') || (str[0] == 'r') || (str[0] == 'n')
-            || (str[0] == 'b'))
-            printf("figure\n");
-        else {
-            int status = WPawnMoves(str, white, black);
-            if (status != 0)
-                return status;
-        }
-        int p = 0;
-        while (str[p++] != ' ')
-            ;
         if ((str[p] == 'K') || (str[p] == 'Q') || (str[p] == 'R')
             || (str[p] == 'N') || (str[p] == 'B') || (str[p] == 'k')
             || (str[p] == 'q') || (str[p] == 'r') || (str[p] == 'n')
-            || (str[p] == 'b'))
-            printf("figure\n");
-        else {
-            int status = BPawnMoves(str, white, black, p);
+            || (str[p] == 'b')) {
+            figureType(str, white, black, p);
+            if (status != 0)
+                return status;
+        } else {
+            status = WPawnMoves(str, white, black);
+            if (status != 0)
+                return status;
+        }
+        p = 0;
+        while (str[p] != ' ')
+            p++;
+        if ((str[p] == 'K') || (str[p] == 'Q') || (str[p] == 'R')
+            || (str[p] == 'N') || (str[p] == 'B') || (str[p] == 'k')
+            || (str[p] == 'q') || (str[p] == 'r') || (str[p] == 'n')
+            || (str[p] == 'b')) {
+            figureType(str, white, black, p);
+            if (status != 0)
+                return status;
+        } else {
+            status = BPawnMoves(str, white, black, p);
             if (status != 0)
                 return status;
         }
@@ -89,6 +98,158 @@ int board()
     return 0;
 }
 
+int KingMove(char str[20], figure* white, figure* black, int p)
+{
+    p++;
+    char symbol = str[p++];
+    int x = defenitionX(symbol);
+    symbol = str[p++];
+    int y = defenitionY(symbol);
+    symbol = str[p++];
+    if (symbol == '-') {
+        symbol = str[p++];
+        int xNew = defenitionX(symbol);
+        symbol = str[p++];
+        int yNew = defenitionY(symbol);
+        if (((x - xNew == 1) && (y - yNew == 1))
+            || ((yNew - y == 0) && (x - xNew == 1))
+            || ((x - xNew == 1) && (yNew - y == 1))
+            || ((x - xNew == 0) && (yNew - y == 1))
+            || ((xNew - x == 1) && (yNew - y == 1))
+            || ((xNew - x == 1) && (y - yNew == 0))
+            || ((xNew - x == 1) && (y - yNew == 1))
+            || ((x - xNew == 0) && (y - yNew == 1))) {
+            int c = 100;
+            for (int i = 0; i < 16; ++i) {
+                if (p < 7) {
+                    if (white[i].x == x && white[i].y == y) {
+                        c = i;
+                    }
+                    if ((white[i].x == xNew && white[i].y == yNew)
+                        || (black[i].x == xNew && black[i].y == yNew)) {
+                        status = 11;
+                        return 11;
+                    }
+                } else if (p >= 7) {
+                    if (black[i].x == x && black[i].y == y) {
+                        c = i;
+                    }
+                    if ((white[i].x == xNew && white[i].y == yNew)
+                        || (black[i].x == xNew && black[i].y == yNew)) {
+                        status = 11;
+                        return 11;
+                    }
+                }
+            }
+            if (c == 100) {
+                status = 6;
+                return 6;
+            }
+            if (p < 7) {
+                if (white[c].name != 'k' || white[c].name != 'K') {
+                    status = 12;
+                    return 12;
+                }
+                white[c].y = yNew;
+                white[c].x = xNew;
+            } else if (p >= 7) {
+                if (black[c].name != 'k' || black[c].name != 'K') {
+                    status = 12;
+                    return 12;
+                }
+                black[c].y = yNew;
+                black[c].x = xNew;
+            }
+        } else {
+            status = 10;
+            return 10;
+        }
+    } else if (symbol == 'x') {
+        symbol = str[p++];
+        int xNew = defenitionX(symbol);
+        symbol = str[p++];
+        int yNew = defenitionY(symbol);
+        if (((x - xNew == 1) && (y - yNew == 1))
+            || ((yNew - y == 0) && (x - xNew == 1))
+            || ((x - xNew == 1) && (yNew - y == 1))
+            || ((x - xNew == 0) && (yNew - y == 1))
+            || ((xNew - x == 1) && (yNew - y == 1))
+            || ((xNew - x == 1) && (y - yNew == 0))
+            || ((xNew - x == 1) && (y - yNew == 1))
+            || ((x - xNew == 0) && (y - yNew == 1))) {
+            int c = 100, o = 100;
+            for (int i = 0; i < 16; ++i) {
+                if (p < 7) {
+                    if (white[i].x == x && white[i].y == y) {
+                        c = i;
+                    }
+                    if (white[i].x == xNew && white[i].y == yNew) {
+                        status = 11;
+                        return 11;
+                    }
+                    if (black[i].x == xNew && black[i].y == yNew) {
+                        o = i;
+                    }
+                } else if (p >= 7) {
+                    if (black[i].x == x && black[i].y == y) {
+                        c = i;
+                    }
+                    if (white[i].x == xNew && white[i].y == yNew) {
+                        o = i;
+                    }
+                    if (black[i].x == xNew && black[i].y == yNew) {
+                        status = 11;
+                        return 11;
+                    }
+                }
+            }
+            if (c == 100 || o == 100) {
+                status = 6;
+                return 6;
+            }
+            if (p < 7) {
+                if (white[c].name != 'k' || white[c].name != 'K') {
+                    status = 12;
+                    return 12;
+                }
+                white[c].y = yNew;
+                white[c].x = xNew;
+                black[o].alive = 0;
+            } else if (p >= 7) {
+                if (black[c].name != 'k' || black[c].name != 'K') {
+                    status = 12;
+                    return 12;
+                }
+                black[c].y = yNew;
+                black[c].x = xNew;
+                white[c].alive = 0;
+            }
+        } else {
+            status = 10;
+            return 10;
+        }
+    } else {
+        status = 5;
+        return 5;
+    }
+    return 0;
+}
+
+int figureType(char str[20], figure* white, figure* black, int p)
+{
+    switch (str[p]) {
+    case 'K':
+        KingMove(str, white, black, p);
+        break;
+    case 'k':
+        KingMove(str, white, black, p);
+        break;
+    default:
+        return 9;
+    }
+    return 0;
+}
+
 int WPawnMoves(char str[20], figure* white, figure* black)
 {
     int k = 0;
@@ -97,12 +258,15 @@ int WPawnMoves(char str[20], figure* white, figure* black)
     x = defenitionX(symbol);
     symbol = str[k++];
     y = defenitionY(symbol);
+    symbol = str[k++];
     int xNew, yNew;
-    if (str[k++] == '-') {
+    if (symbol == '-') {
         symbol = str[k++];
         xNew = defenitionX(symbol);
         symbol = str[k++];
         yNew = defenitionY(symbol);
+        if (xNew == 8 || yNew == 8 || y == 8 || x == 8)
+            return 8;
         int c = 100;
         for (int i = 0; i < 16; ++i) {
             if (white[i].x == x && white[i].y == y)
@@ -113,8 +277,9 @@ int WPawnMoves(char str[20], figure* white, figure* black)
         }
         if (c == 100)
             return 6;
-        if ((x - xNew != 0) || ((white[c].flag != 0) && (y - yNew > 1)))
-            return 1;
+        if ((x - xNew != 0) || ((white[c].flag != 0) && (y - yNew > 1))
+            || (y - yNew > 2))
+            return 2;
         if (y - yNew == 2) {
             int between = y - 1;
             for (int i = 0; i < 16; ++i) {
@@ -159,17 +324,21 @@ int WPawnMoves(char str[20], figure* white, figure* black)
 
 int BPawnMoves(char str[20], figure* white, figure* black, int p)
 {
+    p++;
     char symbol = str[p++];
     int x, y;
     x = defenitionX(symbol);
     symbol = str[p++];
     y = defenitionY(symbol);
+    symbol = str[p++];
     int xNew, yNew;
-    if (str[p++] == '-') {
+    if (symbol == '-') {
         symbol = str[p++];
         xNew = defenitionX(symbol);
         symbol = str[p++];
         yNew = defenitionY(symbol);
+        if (xNew == 8 || yNew == 8 || y == 8 || x == 8)
+            return 8;
         int c = 100;
         for (int i = 0; i < 16; ++i) {
             if (black[i].x == x && black[i].y == y)
@@ -180,8 +349,9 @@ int BPawnMoves(char str[20], figure* white, figure* black, int p)
         }
         if (c == 100)
             return 6;
-        if ((x - xNew != 0) || ((black[c].flag != 0) && (yNew - y > 1)))
-            return 1;
+        if ((x - xNew != 0) || ((black[c].flag != 0) && (yNew - y > 1))
+            || (yNew - y > 2))
+            return 2;
         if (yNew - y == 2) {
             int between = yNew - 1;
             for (int i = 0; i < 16; ++i) {

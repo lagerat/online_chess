@@ -19,6 +19,7 @@ int boardPrint(char a[][8])
     }
     fputs("  A B C D E F G H", boardField);
 
+
     fclose(boardField);
     return 0;
 }
