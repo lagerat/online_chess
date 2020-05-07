@@ -53,6 +53,9 @@ int main()
     case 15:
         printf("wrong bishop move");
         return 15;
+    case 16:
+        printf("The queen is trying to go to the cell that is occupide by another piece");
+        break;
     case 0:
         printf("All good\n");
         break;

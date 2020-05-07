@@ -2,11 +2,13 @@
 #include "board_print.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int figureType(char str[20], figure* white, figure* black, int p);
 int RookMove(char str[20], figure* white, figure* black, int p);
+int QueenMove(char str[20], figure* white, figure* black, int p);
 int BishopMove(char str[20], figure* white, figure* black, int p);
-int kingMove(char str[20], figure* white, figure* black, int p);
+int KingMove(char str[20], figure* white, figure* black, int p);
 int kNightMove(char str[20], figure* white, figure* black, int p);
 int WPawnMoves(char str[20], figure* white, figure* black);
 int BPawnMoves(char str[20], figure* white, figure* black, int p);
@@ -52,9 +54,12 @@ int board()
         printf("Cannot open notation file.\n");
         return 1;
     }
+    char board[8][8];
     int p = 0;
     status = 0;
     char str[20] = "\0";
+    int countFile = 0;
+    char notan[7] = "\0";
     while (feof(notation) == 0) {
         fgets(str, 19, notation);
         p = 0;
@@ -69,6 +74,21 @@ int board()
             if (status != 0)
                 return status;
         }
+        for (int i = 0; str[i] != ' '; ++i) {
+            notan[i] = str[i];
+        }
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j) {
+                board[i][j] = ' ';
+            }
+        }
+        for (int i = 0; i < 16; ++i) {
+            if (black[i].alive)
+                board[black[i].y][black[i].x] = black[i].name;
+            if (white[i].alive)
+                board[white[i].y][white[i].x] = white[i].name;
+        }
+        boardPrint(board,countFile++,notan);
         p = 0;
         while (str[p] != ' ')
             p++;
@@ -85,20 +105,382 @@ int board()
             if (status != 0)
                 return status;
         }
-    }
-    char board[8][8];
-    for (int i = 0; i < 8; ++i) {
-        for (int j = 0; j < 8; ++j) {
-            board[i][j] = ' ';
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j) {
+                board[i][j] = ' ';
+            }
         }
+        for (int i = 0; i < 16; ++i) {
+            if (black[i].alive)
+                board[black[i].y][black[i].x] = black[i].name;
+            if (white[i].alive)
+                board[white[i].y][white[i].x] = white[i].name;
+        }
+        int counter = 0;
+        for (int i = p; (str[i] != '\n') && (str[i] != '\0'); ++i) {
+            notan[counter++] = str[i];
+        }
+        notan[counter] = '\0';
+        boardPrint(board,countFile,notan);
     }
-    for (int i = 0; i < 16; ++i) {
-        if (black[i].alive)
-            board[black[i].y][black[i].x] = black[i].name;
-        if (white[i].alive)
-            board[white[i].y][white[i].x] = white[i].name;
+    return 0;
+}
+
+int QueenMove(char str[20], figure* white, figure* black, int p)
+{
+    p++;
+    char symbol = str[p++];
+    int x = defenitionX(symbol);
+    symbol = str[p++];
+    int y = defenitionY(symbol);
+    symbol = str[p++];
+    if (symbol == '-') {
+        symbol = str[p++];
+        int xNew = defenitionX(symbol);
+        symbol = str[p++];
+        int yNew = defenitionY(symbol);
+        if (x == 8 || y == 8 || xNew == 8 || yNew == 8) {
+            status = 8;
+            return 8;
+        }
+        if ((abs((y - yNew)) == abs((x - xNew))) || (x == xNew && y != yNew)
+            || (y == yNew && x != xNew)) {
+            int c = 100;
+            for (int i = 0; i < 16; ++i) {
+                if (p < 7) {
+                    if (white[i].x == x && white[i].y == y
+                        && white[i].alive == 1) {
+                        c = i;
+                    }
+                    if ((white[i].x == xNew && white[i].y == yNew
+                         && white[i].alive == 1)
+                        || (black[i].x == xNew && black[i].y == yNew)) {
+                        status = 16;
+                        return 16;
+                    }
+                } else if (p >= 7) {
+                    if (black[i].x == x && black[i].y == y
+                        && black[i].alive == 1) {
+                        c = i;
+                    }
+                    if ((white[i].x == xNew && white[i].y == yNew
+                         && white[i].alive == 1)
+                        || (black[i].x == xNew && black[i].y == yNew
+                            && black[i].alive == 1)) {
+                        status = 16;
+                        return 16;
+                    }
+                }
+            }
+            if (c == 100) {
+                status = 6;
+                return 6;
+            }
+            if (x == xNew && y > yNew) {
+                for (int yCheck = y - 1; yCheck > yNew + 1; yCheck--) {
+                    for (int j = 0; j < 16; ++j) {
+                        if ((black[j].x == x && black[j].y == yCheck
+                             && black[j].alive == 1)
+                            || (white[j].x == x && white[j].y == yCheck
+                                && white[j].alive == 1)) {
+                            status = 7;
+                            return 7;
+                        }
+                    }
+                }
+            }
+            if (x == xNew && y < yNew) {
+                for (int yCheck = y + 1; yCheck < yNew - 1; yCheck++) {
+                    for (int j = 0; j < 16; ++j) {
+                        if ((black[j].x == x && black[j].y == yCheck
+                             && black[j].alive == 1)
+                            || (white[j].x == x && white[j].y == yCheck
+                                && white[j].alive == 1)) {
+                            status = 7;
+                            return 7;
+                        }
+                    }
+                }
+            }
+            if (y == yNew && x > xNew) {
+                for (int xCheck = x - 1; xCheck > xNew + 1; xCheck--) {
+                    for (int j = 0; j < 16; ++j) {
+                        if ((black[j].x == xCheck && black[j].y == y
+                             && black[j].alive == 1)
+                            || (white[j].x == xCheck && white[j].y == y
+                                && white[j].alive == 1)) {
+                            status = 7;
+                            return 7;
+                        }
+                    }
+                }
+            }
+            if (y == yNew && x < xNew) {
+                for (int xCheck = x + 1; xCheck < xNew - 1; xCheck++) {
+                    for (int j = 0; j < 16; ++j) {
+                        if ((black[j].x == xCheck && black[j].y == y
+                             && black[j].alive == 1)
+                            || (white[j].x == xCheck && white[j].y == y
+                                && white[j].alive == 1)) {
+                            status = 7;
+                            return 7;
+                        }
+                    }
+                }
+            }
+            if ((xNew - x > 0) && (y - yNew > 0)) {
+                int xCheck = x + 1;
+                for (int yCheck = y - 1; yCheck > yNew; yCheck--) {
+                    for (int j = 0; j < 16; ++j) {
+                        if ((black[j].x == xCheck && black[j].y == yCheck
+                             && black[j].alive == 1)
+                            || (white[j].x == xCheck && white[j].y == yCheck
+                                && white[j].alive == 1)) {
+                            status = 7;
+                            return 7;
+                        }
+                    }
+                    xCheck++;
+                }
+            }
+            if ((xNew - x < 0) && (y - yNew < 0)) {
+                int xCheck = x - 1;
+                for (int yCheck = y + 1; yCheck < yNew; yCheck++) {
+                    for (int j = 0; j < 16; ++j) {
+                        if ((black[j].x == xCheck && black[j].y == yCheck
+                             && black[j].alive == 1)
+                            || (white[j].x == xCheck && white[j].y == yCheck
+                                && white[j].alive == 1)) {
+                            status = 7;
+                            return 7;
+                        }
+                    }
+                    xCheck--;
+                }
+            }
+            if ((xNew - x < 0) && (y - yNew > 0)) {
+                int yCheck = y - 1;
+                for (int xCheck = x - 1; xCheck > xNew; xCheck--) {
+                    for (int j = 0; j < 16; ++j) {
+                        if ((black[j].x == xCheck && black[j].y == yCheck
+                             && black[j].alive == 1)
+                            || (white[j].x == xCheck && white[j].y == yCheck
+                                && white[j].alive == 1)) {
+                            status = 7;
+                            return 7;
+                        }
+                    }
+                    yCheck--;
+                }
+            }
+
+            if ((xNew - x > 0) && (y - yNew < 0)) {
+                int yCheck = y + 1;
+                for (int xCheck = x + 1; xCheck < xNew; xCheck++) {
+                    for (int j = 0; j < 16; ++j) {
+                        if ((black[j].x == xCheck && black[j].y == yCheck
+                             && black[j].alive == 1)
+                            || (white[j].x == xCheck && white[j].y == yCheck
+                                && white[j].alive == 1)) {
+                            status = 7;
+                            return 7;
+                        }
+                    }
+                    yCheck++;
+                }
+            }
+            if (p < 7) {
+                if (white[c].name != 'Q' && white[c].name != 'q') {
+                    status = 12;
+                    return 12;
+                }
+                white[c].y = yNew;
+                white[c].x = xNew;
+            } else if (p >= 7) {
+                if (black[c].name != 'Q' && black[c].name != 'q') {
+                    status = 12;
+                    return 12;
+                }
+                black[c].y = yNew;
+                black[c].x = xNew;
+            }
+        } else {
+            status = 15;
+            return 15;
+        }
+    } else if (symbol == 'x') {
+        symbol = str[p++];
+        int xNew = defenitionX(symbol);
+        symbol = str[p++];
+        int yNew = defenitionY(symbol);
+        if ((abs((y - yNew)) == abs((x - xNew))) || (x == xNew && y != yNew)
+            || (y == yNew && x != xNew)) {
+            int c = 100, o = 100;
+            for (int i = 0; i < 16; ++i) {
+                if (p < 7) {
+                    if (white[i].x == x && white[i].y == y
+                        && white[i].alive == 1) {
+                        c = i;
+                    }
+                    if (white[i].x == xNew && white[i].y == yNew
+                        && white[i].alive == 1) {
+                        status = 12;
+                        return 12;
+                    }
+                    if (black[i].x == xNew && black[i].y == yNew
+                        && black[i].alive == 1) {
+                        o = i;
+                    }
+                } else if (p >= 7) {
+                    if (black[i].x == x && black[i].y == y
+                        && black[i].alive == 1) {
+                        c = i;
+                    }
+                    if (white[i].x == xNew && white[i].y == yNew
+                        && white[i].alive == 1) {
+                        o = i;
+                    }
+                    if (black[i].x == xNew && black[i].y == yNew
+                        && black[i].alive == 1) {
+                        status = 12;
+                        return 12;
+                    }
+                }
+            }
+            if (c == 100 || o == 100) {
+                status = 6;
+                return 6;
+            }
+            if (x == xNew && y > yNew) {
+                for (int yCheck = y - 1; yCheck > yNew; yCheck--) {
+                    for (int j = 0; j < 16; ++j) {
+                        if ((black[j].x == x && black[j].y == yCheck
+                             && black[j].alive == 1)
+                            || (white[j].x == x && white[j].y == yCheck
+                                && white[j].alive == 1)) {
+                            status = 7;
+                            return 7;
+                        }
+                    }
+                }
+            } else if (x == xNew && y < yNew) {
+                for (int yCheck = y + 1; yCheck < yNew; yCheck++) {
+                    for (int j = 0; j < 16; ++j) {
+                        if ((black[j].x == x && black[j].y == yCheck
+                             && black[j].alive == 1)
+                            || (white[j].x == x && white[j].y == yCheck
+                                && white[j].alive == 1)) {
+                            status = 7;
+                            return 7;
+                        }
+                    }
+                }
+            } else if (y == yNew && x > xNew) {
+                for (int xCheck = x - 1; xCheck > xNew; xCheck--) {
+                    for (int j = 0; j < 16; ++j) {
+                        if ((black[j].x == xCheck && black[j].y == y
+                             && black[j].alive == 1)
+                            || (white[j].x == xCheck && white[j].y == y
+                                && white[j].alive == 1)) {
+                            status = 7;
+                            return 7;
+                        }
+                    }
+                }
+            } else if (y == yNew && x < xNew) {
+                for (int xCheck = x + 1; xCheck < xNew; xCheck++) {
+                    for (int j = 0; j < 16; ++j) {
+                        if ((black[j].x == xCheck && black[j].y == y
+                             && black[j].alive == 1)
+                            || (white[j].x == xCheck && white[j].y == y
+                                && white[j].alive == 1)) {
+                            status = 7;
+                            return 7;
+                        }
+                    }
+                }
+            } else if ((xNew - x > 0) && (y - yNew > 0)) {
+                int xCheck = x + 1;
+                for (int yCheck = y - 1; yCheck > yNew; yCheck--) {
+                    for (int j = 0; j < 16; ++j) {
+                        if ((black[j].x == xCheck && black[j].y == yCheck
+                             && black[j].alive == 1)
+                            || (white[j].x == xCheck && white[j].y == yCheck
+                                && white[j].alive == 1)) {
+                            status = 7;
+                            return 7;
+                        }
+                    }
+                    xCheck++;
+                }
+            } else if ((xNew - x < 0) && (y - yNew < 0)) {
+                int xCheck = x - 1;
+                for (int yCheck = y + 1; yCheck < yNew; yCheck++) {
+                    for (int j = 0; j < 16; ++j) {
+                        if ((black[j].x == xCheck && black[j].y == yCheck
+                             && black[j].alive == 1)
+                            || (white[j].x == xCheck && white[j].y == yCheck
+                                && white[j].alive == 1)) {
+                            status = 7;
+                            return 7;
+                        }
+                    }
+                    xCheck--;
+                }
+            } else if ((xNew - x < 0) && (y - yNew > 0)) {
+                int yCheck = y - 1;
+                for (int xCheck = x - 1; xCheck > xNew; xCheck--) {
+                    for (int j = 0; j < 16; ++j) {
+                        if ((black[j].x == xCheck && black[j].y == yCheck
+                             && black[j].alive == 1)
+                            || (white[j].x == xCheck && white[j].y == yCheck
+                                && white[j].alive == 1)) {
+                            status = 7;
+                            return 7;
+                        }
+                    }
+                    yCheck--;
+                }
+            } else if ((xNew - x > 0) && (y - yNew < 0)) {
+                int yCheck = y + 1;
+                for (int xCheck = x + 1; xCheck < xNew; xCheck++) {
+                    for (int j = 0; j < 16; ++j) {
+                        if ((black[j].x == xCheck && black[j].y == yCheck
+                             && black[j].alive == 1)
+                            || (white[j].x == xCheck && white[j].y == yCheck
+                                && white[j].alive == 1)) {
+                            status = 7;
+                            return 7;
+                        }
+                    }
+                    yCheck++;
+                }
+            }
+            if (p < 7) {
+                if (white[c].name != 'Q' && white[c].name != 'q') {
+                    status = 12;
+                    return 12;
+                }
+                white[c].y = yNew;
+                white[c].x = xNew;
+                black[o].alive = 0;
+            } else if (p >= 7) {
+                if (black[c].name != 'Q' && black[c].name != 'q') {
+                    status = 12;
+                    return 12;
+                }
+                black[c].y = yNew;
+                black[c].x = xNew;
+                white[c].alive = 0;
+            }
+        } else {
+            status = 15;
+            return 15;
+        }
+    } else {
+        status = 5;
+        return 5;
     }
-    boardPrint(board);
     return 0;
 }
 
@@ -914,25 +1296,23 @@ int figureType(char str[20], figure* white, figure* black, int p)
 {
     switch (str[p]) {
     case 'K':
-        KingMove(str, white, black, p);
-        break;
     case 'k':
         KingMove(str, white, black, p);
         break;
     case 'N':
-        kNightMove(str, white, black, p);
-        break;
     case 'n':
         kNightMove(str, white, black, p);
         break;
     case 'r':
-        RookMove(str, white, black, p);
-        break;
     case 'R':
         RookMove(str, white, black, p);
         break;
     case 'B':
         BishopMove(str, white, black, p);
+        break;
+    case 'q':
+    case 'Q':
+        QueenMove(str, white, black, p);
         break;
     default:
         return 9;

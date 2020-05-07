@@ -10,5 +10,5 @@ typedef struct figure {
     char alive;
 } figure;
 
-int boardPrint(char a[][8]);
+int boardPrint(char a[][8],int count, char notation[7]);
 #endif // CHESS_BOARD_PRINT_H
