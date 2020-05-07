@@ -52,7 +52,7 @@ int board()
     FILE* notation;
     if ((notation = fopen("..//bin//notation.txt", "r+")) == NULL) {
         printf("Cannot open notation file.\n");
-        return 1;
+        return 10;
     }
     char board[8][8];
     int p = 0;
@@ -88,7 +88,8 @@ int board()
             if (white[i].alive)
                 board[white[i].y][white[i].x] = white[i].name;
         }
-        boardPrint(board,countFile++,notan);
+        if(boardPrint(board, countFile++, notan) == 1)
+            return 10;
         p = 0;
         while (str[p] != ' ')
             p++;
@@ -121,7 +122,8 @@ int board()
             notan[counter++] = str[i];
         }
         notan[counter] = '\0';
-        boardPrint(board,countFile,notan);
+        if(boardPrint(board, countFile++, notan) == 1)
+            return 10;
     }
     return 0;
 }
@@ -155,8 +157,8 @@ int QueenMove(char str[20], figure* white, figure* black, int p)
                     if ((white[i].x == xNew && white[i].y == yNew
                          && white[i].alive == 1)
                         || (black[i].x == xNew && black[i].y == yNew)) {
-                        status = 16;
-                        return 16;
+                        status = 11;
+                        return 11;
                     }
                 } else if (p >= 7) {
                     if (black[i].x == x && black[i].y == y
@@ -167,8 +169,8 @@ int QueenMove(char str[20], figure* white, figure* black, int p)
                          && white[i].alive == 1)
                         || (black[i].x == xNew && black[i].y == yNew
                             && black[i].alive == 1)) {
-                        status = 16;
-                        return 16;
+                        status = 11;
+                        return 11;
                     }
                 }
             }
@@ -305,8 +307,8 @@ int QueenMove(char str[20], figure* white, figure* black, int p)
                 black[c].x = xNew;
             }
         } else {
-            status = 15;
-            return 15;
+            status = 13;
+            return 13;
         }
     } else if (symbol == 'x') {
         symbol = str[p++];
@@ -324,8 +326,8 @@ int QueenMove(char str[20], figure* white, figure* black, int p)
                     }
                     if (white[i].x == xNew && white[i].y == yNew
                         && white[i].alive == 1) {
-                        status = 12;
-                        return 12;
+                        status = 14;
+                        return 14;
                     }
                     if (black[i].x == xNew && black[i].y == yNew
                         && black[i].alive == 1) {
@@ -342,8 +344,8 @@ int QueenMove(char str[20], figure* white, figure* black, int p)
                     }
                     if (black[i].x == xNew && black[i].y == yNew
                         && black[i].alive == 1) {
-                        status = 12;
-                        return 12;
+                        status = 14;
+                        return 14;
                     }
                 }
             }
@@ -474,8 +476,8 @@ int QueenMove(char str[20], figure* white, figure* black, int p)
                 white[c].alive = 0;
             }
         } else {
-            status = 15;
-            return 15;
+            status = 13;
+            return 13;
         }
     } else {
         status = 5;
@@ -512,8 +514,8 @@ int BishopMove(char str[20], figure* white, figure* black, int p)
                     if ((white[i].x == xNew && white[i].y == yNew
                          && white[i].alive == 1)
                         || (black[i].x == xNew && black[i].y == yNew)) {
-                        status = 15;
-                        return 15;
+                        status = 11;
+                        return 11;
                     }
                 } else if (p >= 7) {
                     if (black[i].x == x && black[i].y == y
@@ -524,8 +526,8 @@ int BishopMove(char str[20], figure* white, figure* black, int p)
                          && white[i].alive == 1)
                         || (black[i].x == xNew && black[i].y == yNew
                             && black[i].alive == 1)) {
-                        status = 15;
-                        return 15;
+                        status = 11;
+                        return 11;
                     }
                 }
             }
@@ -610,8 +612,8 @@ int BishopMove(char str[20], figure* white, figure* black, int p)
                 black[c].x = xNew;
             }
         } else {
-            status = 15;
-            return 15;
+            status = 13;
+            return 13;
         }
     } else if (symbol == 'x') {
         symbol = str[p++];
@@ -628,8 +630,8 @@ int BishopMove(char str[20], figure* white, figure* black, int p)
                     }
                     if (white[i].x == xNew && white[i].y == yNew
                         && white[i].alive == 1) {
-                        status = 12;
-                        return 12;
+                        status = 11;
+                        return 11;
                     }
                     if (black[i].x == xNew && black[i].y == yNew
                         && black[i].alive == 1) {
@@ -646,8 +648,8 @@ int BishopMove(char str[20], figure* white, figure* black, int p)
                     }
                     if (black[i].x == xNew && black[i].y == yNew
                         && black[i].alive == 1) {
-                        status = 12;
-                        return 12;
+                        status = 11;
+                        return 11;
                     }
                 }
             }
@@ -734,8 +736,8 @@ int BishopMove(char str[20], figure* white, figure* black, int p)
                 white[c].alive = 0;
             }
         } else {
-            status = 15;
-            return 15;
+            status = 13;
+            return 13;
         }
     } else {
         status = 5;
@@ -793,21 +795,6 @@ int RookMove(char str[20], figure* white, figure* black, int p)
                 status = 6;
                 return 6;
             }
-            if (p < 7) {
-                if (white[c].name != 'R' && white[c].name != 'r') {
-                    status = 12;
-                    return 12;
-                }
-                white[c].y = yNew;
-                white[c].x = xNew;
-            } else if (p >= 7) {
-                if (black[c].name != 'R' && black[c].name != 'r') {
-                    status = 12;
-                    return 12;
-                }
-                black[c].y = yNew;
-                black[c].x = xNew;
-            }
             if (x == xNew && y > yNew) {
                 for (int yCheck = y - 1; yCheck > yNew + 1; yCheck--) {
                     for (int j = 0; j < 16; ++j) {
@@ -860,9 +847,24 @@ int RookMove(char str[20], figure* white, figure* black, int p)
                     }
                 }
             }
+            if (p < 7) {
+                if (white[c].name != 'R' && white[c].name != 'r') {
+                    status = 12;
+                    return 12;
+                }
+                white[c].y = yNew;
+                white[c].x = xNew;
+            } else if (p >= 7) {
+                if (black[c].name != 'R' && black[c].name != 'r') {
+                    status = 12;
+                    return 12;
+                }
+                black[c].y = yNew;
+                black[c].x = xNew;
+            }
         } else {
-            status = 10;
-            return 10;
+            status = 13;
+            return 13;
         }
     } else if (symbol == 'x') {
         symbol = str[p++];
@@ -976,8 +978,8 @@ int RookMove(char str[20], figure* white, figure* black, int p)
                 white[c].alive = 0;
             }
         } else {
-            status = 10;
-            return 10;
+            status = 13;
+            return 13;
         }
     } else {
         status = 5;
@@ -1022,8 +1024,8 @@ int kNightMove(char str[20], figure* white, figure* black, int p)
                          && white[i].alive == 1)
                         || (black[i].x == xNew && black[i].y == yNew
                             && black[i].alive == 1)) {
-                        status = 13;
-                        return 13;
+                        status = 11;
+                        return 11;
                     }
                 } else if (p >= 7) {
                     if (black[i].x == x && black[i].y == y) {
@@ -1033,8 +1035,8 @@ int kNightMove(char str[20], figure* white, figure* black, int p)
                          && white[i].alive == 1)
                         || (black[i].x == xNew && black[i].y == yNew
                             && white[i].alive == 1)) {
-                        status = 13;
-                        return 13;
+                        status = 11;
+                        return 11;
                     }
                 }
             }
@@ -1058,8 +1060,8 @@ int kNightMove(char str[20], figure* white, figure* black, int p)
                 black[c].x = xNew;
             }
         } else {
-            status = 14;
-            return 14;
+            status = 13;
+            return 13;
         }
 
     } else if (symbol == 'x') {
@@ -1106,8 +1108,8 @@ int kNightMove(char str[20], figure* white, figure* black, int p)
                     }
                     if (black[i].x == xNew && black[i].y == yNew
                         && black[i].alive == 1) {
-                        status = 13;
-                        return 13;
+                        status = 14;
+                        return 14;
                     }
                 }
             }
@@ -1133,8 +1135,8 @@ int kNightMove(char str[20], figure* white, figure* black, int p)
                 white[c].alive = 0;
             }
         } else {
-            status = 14;
-            return 14;
+            status = 13;
+            return 13;
         }
     }
     return 0;
@@ -1212,8 +1214,8 @@ int KingMove(char str[20], figure* white, figure* black, int p)
                 black[c].x = xNew;
             }
         } else {
-            status = 10;
-            return 10;
+            status = 13;
+            return 13;
         }
     } else if (symbol == 'x') {
         symbol = str[p++];
@@ -1237,8 +1239,8 @@ int KingMove(char str[20], figure* white, figure* black, int p)
                     }
                     if (white[i].x == xNew && white[i].y == yNew
                         && white[i].alive == 1) {
-                        status = 11;
-                        return 11;
+                        status = 14;
+                        return 14;
                     }
                     if (black[i].x == xNew && black[i].y == yNew
                         && black[i].alive == 1) {
@@ -1255,8 +1257,8 @@ int KingMove(char str[20], figure* white, figure* black, int p)
                     }
                     if (black[i].x == xNew && black[i].y == yNew
                         && black[i].alive == 1) {
-                        status = 11;
-                        return 11;
+                        status = 14;
+                        return 14;
                     }
                 }
             }
@@ -1282,8 +1284,8 @@ int KingMove(char str[20], figure* white, figure* black, int p)
                 white[c].alive = 0;
             }
         } else {
-            status = 10;
-            return 10;
+            status = 13;
+            return 13;
         }
     } else {
         status = 5;
