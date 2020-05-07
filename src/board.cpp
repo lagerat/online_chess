@@ -56,6 +56,7 @@ int board()
     char str[20] = "\0";
     while (feof(notation) == 0) {
         fgets(str, 19, notation);
+        p = 0;
         if ((str[p] == 'K') || (str[p] == 'Q') || (str[p] == 'R')
             || (str[p] == 'N') || (str[p] == 'B') || (str[p] == 'k')
             || (str[p] == 'q') || (str[p] == 'r') || (str[p] == 'n')
@@ -71,6 +72,7 @@ int board()
         p = 0;
         while (str[p] != ' ')
             p++;
+        p++;
         if ((str[p] == 'K') || (str[p] == 'Q') || (str[p] == 'R')
             || (str[p] == 'N') || (str[p] == 'B') || (str[p] == 'k')
             || (str[p] == 'q') || (str[p] == 'r') || (str[p] == 'n')
@@ -117,24 +119,24 @@ int RookMove(char str[20], figure* white, figure* black, int p)
             status = 8;
             return 8;
         }
-        if ((x == xNew && y != yNew) || (y = yNew && x != xNew)) {
+        if ((x == xNew && y != yNew) || (y == yNew && x != xNew)) {
             int c = 100;
             for (int i = 0; i < 16; ++i) {
                 if (p < 7) {
-                    if (white[i].x == x && white[i].y == y) {
+                    if (white[i].x == x && white[i].y == y && white[i].alive == 1) {
                         c = i;
                     }
-                    if ((white[i].x == xNew && white[i].y == yNew)
+                    if ((white[i].x == xNew && white[i].y == yNew && white[i].alive == 1)
                         || (black[i].x == xNew && black[i].y == yNew)) {
                         status = 11;
                         return 11;
                     }
                 } else if (p >= 7) {
-                    if (black[i].x == x && black[i].y == y) {
+                    if (black[i].x == x && black[i].y == y && black[i].alive == 1) {
                         c = i;
                     }
-                    if ((white[i].x == xNew && white[i].y == yNew)
-                        || (black[i].x == xNew && black[i].y == yNew)) {
+                    if ((white[i].x == xNew && white[i].y == yNew && white[i].alive == 1)
+                        || (black[i].x == xNew && black[i].y == yNew && black[i].alive == 1)) {
                         status = 11;
                         return 11;
                     }
@@ -145,14 +147,14 @@ int RookMove(char str[20], figure* white, figure* black, int p)
                 return 6;
             }
             if (p < 7) {
-                if (white[c].name != 'R' || white[c].name != 'r') {
+                if (white[c].name != 'R' && white[c].name != 'r') {
                     status = 12;
                     return 12;
                 }
                 white[c].y = yNew;
                 white[c].x = xNew;
             } else if (p >= 7) {
-                if (black[c].name != 'R' || black[c].name != 'r') {
+                if (black[c].name != 'R' && black[c].name != 'r') {
                     status = 12;
                     return 12;
                 }
@@ -224,24 +226,24 @@ int RookMove(char str[20], figure* white, figure* black, int p)
             int c = 100, o = 100;
             for (int i = 0; i < 16; ++i) {
                 if (p < 7) {
-                    if (white[i].x == x && white[i].y == y) {
+                    if (white[i].x == x && white[i].y == y && white[i].alive == 1) {
                         c = i;
                     }
-                    if (white[i].x == xNew && white[i].y == yNew) {
+                    if (white[i].x == xNew && white[i].y == yNew && white[i].alive == 1) {
                         status = 11;
                         return 11;
                     }
-                    if (black[i].x == xNew && black[i].y == yNew) {
+                    if (black[i].x == xNew && black[i].y == yNew && black[i].alive == 1) {
                         o = i;
                     }
                 } else if (p >= 7) {
-                    if (black[i].x == x && black[i].y == y) {
+                    if (black[i].x == x && black[i].y == y && black[i].alive == 1) {
                         c = i;
                     }
-                    if (white[i].x == xNew && white[i].y == yNew) {
+                    if (white[i].x == xNew && white[i].y == yNew && white[i].alive == 1) {
                         o = i;
                     }
-                    if (black[i].x == xNew && black[i].y == yNew) {
+                    if (black[i].x == xNew && black[i].y == yNew && black[i].alive == 1) {
                         status = 11;
                         return 11;
                     }
@@ -304,7 +306,7 @@ int RookMove(char str[20], figure* white, figure* black, int p)
                 return 6;
             }
             if (p < 7) {
-                if (white[c].name != 'R' || white[c].name != 'r') {
+                if (white[c].name != 'R' && white[c].name != 'r') {
                     status = 12;
                     return 12;
                 }
@@ -312,7 +314,7 @@ int RookMove(char str[20], figure* white, figure* black, int p)
                 white[c].x = xNew;
                 black[o].alive = 0;
             } else if (p >= 7) {
-                if (black[c].name != 'R' || black[c].name != 'r') {
+                if (black[c].name != 'R' && black[c].name != 'r') {
                     status = 12;
                     return 12;
                 }
@@ -359,20 +361,20 @@ int kNightMove(char str[20], figure* white, figure* black, int p)
             int c = 100;
             for (int i = 0; i < 16; ++i) {
                 if (p < 7) {
-                    if (white[i].x == x && white[i].y == y) {
+                    if (white[i].x == x && white[i].y == y && white[i].alive == 1) {
                         c = i;
                     }
-                    if ((white[i].x == xNew && white[i].y == yNew)
-                        || (black[i].x == xNew && black[i].y == yNew)) {
-                        status = 14;
-                        return 14;
+                    if ((white[i].x == xNew && white[i].y == yNew && white[i].alive == 1)
+                        || (black[i].x == xNew && black[i].y == yNew && black[i].alive == 1)) {
+                        status = 13;
+                        return 13;
                     }
                 } else if (p >= 7) {
                     if (black[i].x == x && black[i].y == y) {
                         c = i;
                     }
-                    if ((white[i].x == xNew && white[i].y == yNew)
-                        || (black[i].x == xNew && black[i].y == yNew)) {
+                    if ((white[i].x == xNew && white[i].y == yNew && white[i].alive == 1)
+                        || (black[i].x == xNew && black[i].y == yNew && white[i].alive == 1)) {
                         status = 13;
                         return 13;
                     }
@@ -383,14 +385,14 @@ int kNightMove(char str[20], figure* white, figure* black, int p)
                 return 6;
             }
             if (p < 7) {
-                if (white[c].name != 'B' || white[c].name != 'b') {
+                if (white[c].name != 'B' && white[c].name != 'b') {
                     status = 12;
                     return 12;
                 }
                 white[c].y = yNew;
                 white[c].x = xNew;
             } else if (p >= 7) {
-                if (black[c].name != 'B' || black[c].name != 'b') {
+                if (black[c].name != 'B' && black[c].name != 'b') {
                     status = 12;
                     return 12;
                 }
@@ -398,8 +400,8 @@ int kNightMove(char str[20], figure* white, figure* black, int p)
                 black[c].x = xNew;
             }
         } else {
-            status = 15;
-            return 15;
+            status = 14;
+            return 14;
         }
 
     } else if (symbol == 'x') {
@@ -422,24 +424,24 @@ int kNightMove(char str[20], figure* white, figure* black, int p)
             int c = 100, o = 100;
             for (int i = 0; i < 16; ++i) {
                 if (p < 7) {
-                    if (white[i].x == x && white[i].y == y) {
+                    if (white[i].x == x && white[i].y == y && white[i].alive == 1) {
                         c = i;
                     }
-                    if (white[i].x == xNew && white[i].y == yNew) {
+                    if (white[i].x == xNew && white[i].y == yNew && white[i].alive == 1) {
                         status = 14;
                         return 14;
                     }
-                    if (black[i].x == xNew && black[i].y == yNew) {
+                    if (black[i].x == xNew && black[i].y == yNew && black[i].alive == 1) {
                         o = i;
                     }
                 } else if (p >= 7) {
-                    if (black[i].x == x && black[i].y == y) {
+                    if (black[i].x == x && black[i].y == y && black[i].alive == 1) {
                         c = i;
                     }
-                    if (white[i].x == xNew && white[i].y == yNew) {
+                    if (white[i].x == xNew && white[i].y == yNew && white[i].alive == 1) {
                         o = i;
                     }
-                    if (black[i].x == xNew && black[i].y == yNew) {
+                    if (black[i].x == xNew && black[i].y == yNew && black[i].alive == 1) {
                         status = 13;
                         return 13;
                     }
@@ -450,7 +452,7 @@ int kNightMove(char str[20], figure* white, figure* black, int p)
                 return 6;
             }
             if (p < 7) {
-                if (white[c].name != 'B' || white[c].name != 'b') {
+                if (white[c].name != 'B' && white[c].name != 'b') {
                     status = 12;
                     return 12;
                 }
@@ -458,7 +460,7 @@ int kNightMove(char str[20], figure* white, figure* black, int p)
                 white[c].x = xNew;
                 black[o].alive = 0;
             } else if (p >= 7) {
-                if (black[c].name != 'B' || black[c].name != 'b') {
+                if (black[c].name != 'B' && black[c].name != 'b') {
                     status = 12;
                     return 12;
                 }
@@ -467,8 +469,8 @@ int kNightMove(char str[20], figure* white, figure* black, int p)
                 white[c].alive = 0;
             }
         } else {
-            status = 15;
-            return 15;
+            status = 14;
+            return 14;
         }
     }
     return 0;
@@ -502,11 +504,11 @@ int KingMove(char str[20], figure* white, figure* black, int p)
             int c = 100;
             for (int i = 0; i < 16; ++i) {
                 if (p < 7) {
-                    if (white[i].x == x && white[i].y == y) {
+                    if (white[i].x == x && white[i].y == y && white[i].alive == 1) {
                         c = i;
                     }
-                    if ((white[i].x == xNew && white[i].y == yNew)
-                        || (black[i].x == xNew && black[i].y == yNew)) {
+                    if ((white[i].x == xNew && white[i].y == yNew && white[i].alive == 1)
+                        || (black[i].x == xNew && black[i].y == yNew && black[i].alive == 1)) {
                         status = 11;
                         return 11;
                     }
@@ -514,8 +516,8 @@ int KingMove(char str[20], figure* white, figure* black, int p)
                     if (black[i].x == x && black[i].y == y) {
                         c = i;
                     }
-                    if ((white[i].x == xNew && white[i].y == yNew)
-                        || (black[i].x == xNew && black[i].y == yNew)) {
+                    if ((white[i].x == xNew && white[i].y == yNew && white[i].alive == 1)
+                        || (black[i].x == xNew && black[i].y == yNew && black[i].alive == 1)) {
                         status = 11;
                         return 11;
                     }
@@ -526,14 +528,14 @@ int KingMove(char str[20], figure* white, figure* black, int p)
                 return 6;
             }
             if (p < 7) {
-                if (white[c].name != 'k' || white[c].name != 'K') {
+                if (white[c].name != 'k' && white[c].name != 'K') {
                     status = 12;
                     return 12;
                 }
                 white[c].y = yNew;
                 white[c].x = xNew;
             } else if (p >= 7) {
-                if (black[c].name != 'k' || black[c].name != 'K') {
+                if (black[c].name != 'k' && black[c].name != 'K') {
                     status = 12;
                     return 12;
                 }
@@ -560,24 +562,24 @@ int KingMove(char str[20], figure* white, figure* black, int p)
             int c = 100, o = 100;
             for (int i = 0; i < 16; ++i) {
                 if (p < 7) {
-                    if (white[i].x == x && white[i].y == y) {
+                    if (white[i].x == x && white[i].y == y && white[i].alive == 1) {
                         c = i;
                     }
-                    if (white[i].x == xNew && white[i].y == yNew) {
+                    if (white[i].x == xNew && white[i].y == yNew && white[i].alive == 1) {
                         status = 11;
                         return 11;
                     }
-                    if (black[i].x == xNew && black[i].y == yNew) {
+                    if (black[i].x == xNew && black[i].y == yNew && black[i].alive == 1) {
                         o = i;
                     }
                 } else if (p >= 7) {
-                    if (black[i].x == x && black[i].y == y) {
+                    if (black[i].x == x && black[i].y == y && black[i].alive == 1) {
                         c = i;
                     }
-                    if (white[i].x == xNew && white[i].y == yNew) {
+                    if (white[i].x == xNew && white[i].y == yNew && white[i].alive == 1) {
                         o = i;
                     }
-                    if (black[i].x == xNew && black[i].y == yNew) {
+                    if (black[i].x == xNew && black[i].y == yNew && black[i].alive == 1) {
                         status = 11;
                         return 11;
                     }
@@ -588,7 +590,7 @@ int KingMove(char str[20], figure* white, figure* black, int p)
                 return 6;
             }
             if (p < 7) {
-                if (white[c].name != 'k' || white[c].name != 'K') {
+                if (white[c].name != 'k' && white[c].name != 'K') {
                     status = 12;
                     return 12;
                 }
@@ -596,7 +598,7 @@ int KingMove(char str[20], figure* white, figure* black, int p)
                 white[c].x = xNew;
                 black[o].alive = 0;
             } else if (p >= 7) {
-                if (black[c].name != 'k' || black[c].name != 'K') {
+                if (black[c].name != 'k' && black[c].name != 'K') {
                     status = 12;
                     return 12;
                 }
@@ -661,10 +663,10 @@ int WPawnMoves(char str[20], figure* white, figure* black)
             return 8;
         int c = 100;
         for (int i = 0; i < 16; ++i) {
-            if (white[i].x == x && white[i].y == y)
+            if (white[i].x == x && white[i].y == y && white[i].alive == 1)
                 c = i;
-            if ((black[i].x == xNew && black[i].y == yNew)
-                || (white[i].x == xNew && white[i].y == yNew))
+            if ((black[i].x == xNew && black[i].y == yNew && black[i].alive == 1)
+                || (white[i].x == xNew && white[i].y == yNew && white[i].alive == 1))
                 return 3;
         }
         if (c == 100)
@@ -675,9 +677,9 @@ int WPawnMoves(char str[20], figure* white, figure* black)
         if (y - yNew == 2) {
             int between = y - 1;
             for (int i = 0; i < 16; ++i) {
-                if (white[i].x == x && white[i].y == between)
+                if (white[i].x == x && white[i].y == between && white[i].alive == 1)
                     return 7;
-                if (black[i].x == x && black[i].y == between)
+                if (black[i].x == x && black[i].y == between && black[i].alive == 1)
                     return 7;
             }
         }
@@ -696,11 +698,11 @@ int WPawnMoves(char str[20], figure* white, figure* black)
         if ((abs(x - xNew) != 1) || (y - yNew != 1))
             return 4;
         for (int i = 0; i < 16; ++i) {
-            if (white[i].x == x && white[i].y == y)
+            if (white[i].x == x && white[i].y == y && white[i].alive == 1)
                 c = i;
-            if (white[i].x == xNew && white[i].y == yNew)
+            if (white[i].x == xNew && white[i].y == yNew && white[i].alive == 1)
                 return 3;
-            if ((black[i].x == xNew && black[i].y == yNew))
+            if ((black[i].x == xNew && black[i].y == yNew && black[i].alive == 1))
                 p = i;
         }
         if (p == 100 || c == 100)
@@ -716,7 +718,6 @@ int WPawnMoves(char str[20], figure* white, figure* black)
 
 int BPawnMoves(char str[20], figure* white, figure* black, int p)
 {
-    p++;
     char symbol = str[p++];
     int x, y;
     x = defenitionX(symbol);
@@ -733,10 +734,10 @@ int BPawnMoves(char str[20], figure* white, figure* black, int p)
             return 8;
         int c = 100;
         for (int i = 0; i < 16; ++i) {
-            if (black[i].x == x && black[i].y == y)
+            if (black[i].x == x && black[i].y == y && black[i].alive == 1)
                 c = i;
-            if ((white[i].x == xNew && white[i].y == yNew)
-                || (black[i].x == xNew && black[i].y == yNew))
+            if ((white[i].x == xNew && white[i].y == yNew && white[i].alive == 1)
+                || (black[i].x == xNew && black[i].y == yNew && black[i].alive == 1))
                 return 3;
         }
         if (c == 100)
@@ -747,9 +748,9 @@ int BPawnMoves(char str[20], figure* white, figure* black, int p)
         if (yNew - y == 2) {
             int between = yNew - 1;
             for (int i = 0; i < 16; ++i) {
-                if (white[i].x == x && white[i].y == between)
+                if (white[i].x == x && white[i].y == between && white[i].alive == 1)
                     return 7;
-                if (black[i].x == x && black[i].y == between)
+                if (black[i].x == x && black[i].y == between && black[i].alive == 1)
                     return 7;
             }
         }
@@ -768,11 +769,11 @@ int BPawnMoves(char str[20], figure* white, figure* black, int p)
         if ((abs(x - xNew) != 1) || (yNew - y != 1))
             return 4;
         for (int i = 0; i < 16; ++i) {
-            if (black[i].x == x && black[i].y == y)
+            if (black[i].x == x && black[i].y == y && black[i].alive == 1)
                 c = i;
-            if (black[i].x == xNew && black[i].y == yNew)
+            if (black[i].x == xNew && black[i].y == yNew && black[i].alive == 1)
                 return 3;
-            if ((white[i].x == xNew && white[i].y == yNew))
+            if ((white[i].x == xNew && white[i].y == yNew && white[i].alive == 1))
                 l = i;
         }
         if (l == 100 || c == 100)

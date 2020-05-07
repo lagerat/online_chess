@@ -44,6 +44,12 @@ int main()
     case 12:
         printf("On the indicated cell is not the figure that you indicated");
         return 12;
+    case 13:
+        printf("Knight is trying to go a cell that is occipide by another figure");
+        return 13;
+    case 14:
+        printf("wrong knight move");
+        return 14;
     case 0:
         printf("All good\n");
         break;
