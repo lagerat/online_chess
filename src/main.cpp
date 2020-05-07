@@ -50,6 +50,9 @@ int main()
     case 14:
         printf("wrong knight move");
         return 14;
+    case 15:
+        printf("wrong bishop move");
+        return 15;
     case 0:
         printf("All good\n");
         break;
