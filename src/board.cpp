@@ -4,16 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int figureType(char str[20], figure* white, figure* black, int p);
-int RookMove(char str[20], figure* white, figure* black, int p);
-int QueenMove(char str[20], figure* white, figure* black, int p);
-int BishopMove(char str[20], figure* white, figure* black, int p);
-int KingMove(char str[20], figure* white, figure* black, int p);
-int kNightMove(char str[20], figure* white, figure* black, int p);
-int WPawnMoves(char str[20], figure* white, figure* black);
-int BPawnMoves(char str[20], figure* white, figure* black, int p);
-int defenitionX(char symbol);
-int defenitionY(char symbol);
+
 int status;
 int board()
 {

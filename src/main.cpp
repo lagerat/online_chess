@@ -36,7 +36,7 @@ int main()
         printf("unknow type of figure\n");
         return 9;
     case 10:
-        printf("wrong king Move");
+        printf("Could not create or open file");
         return 10;
     case 11:
         printf("Figure is trying to go to a cell that is occupide by another figure");
@@ -45,17 +45,11 @@ int main()
         printf("On the indicated cell is not the figure that you indicated");
         return 12;
     case 13:
-        printf("Knight is trying to go a cell that is occipide by another figure");
+        printf("wrong cell for a figure move");
         return 13;
     case 14:
-        printf("wrong knight move");
+        printf("Trying to eat your figure");
         return 14;
-    case 15:
-        printf("wrong bishop move");
-        return 15;
-    case 16:
-        printf("The queen is trying to go to the cell that is occupide by another piece");
-        break;
     case 0:
         printf("All good\n");
         break;
