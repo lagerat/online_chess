@@ -1,5 +1,5 @@
-#ifndef CHESS_BOARD_H
-#define CHESS_BOARD_H
+#ifndef BOARD_H
+#define BOARD_H
 
 typedef struct figure {
     char name;
@@ -20,6 +20,6 @@ int defenitionX(char symbol);
 int defenitionY(char symbol);
 int board();
 
-#endif // CHESS_BOARD_H
+#endif // BOARD_H
 
 

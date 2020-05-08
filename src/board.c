@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 int status;
 int board()
 {
@@ -79,7 +78,7 @@ int board()
             if (white[i].alive)
                 board[white[i].y][white[i].x] = white[i].name;
         }
-        if(boardPrint(board, countFile++, notan) == 1)
+        if (boardPrint(board, countFile++, notan) == 1)
             return 10;
         p = 0;
         while (str[p] != ' ')
@@ -113,7 +112,7 @@ int board()
             notan[counter++] = str[i];
         }
         notan[counter] = '\0';
-        if(boardPrint(board, countFile++, notan) == 1)
+        if (boardPrint(board, countFile++, notan) == 1)
             return 10;
     }
     return 0;
