@@ -786,7 +786,7 @@ int RookMove(char str[20], figure* white, figure* black, int p)
                 return 6;
             }
             if (x == xNew && y > yNew) {
-                for (int yCheck = y - 1; yCheck > yNew + 1; yCheck--) {
+                for (int yCheck = y - 1; yCheck > yNew; yCheck--) {
                     for (int j = 0; j < 16; ++j) {
                         if ((black[j].x == x && black[j].y == yCheck
                              && black[j].alive == 1)
@@ -799,7 +799,7 @@ int RookMove(char str[20], figure* white, figure* black, int p)
                 }
             }
             if (x == xNew && y < yNew) {
-                for (int yCheck = y + 1; yCheck < yNew - 1; yCheck++) {
+                for (int yCheck = y + 1; yCheck < yNew; yCheck++) {
                     for (int j = 0; j < 16; ++j) {
                         if ((black[j].x == x && black[j].y == yCheck
                              && black[j].alive == 1)
@@ -812,7 +812,7 @@ int RookMove(char str[20], figure* white, figure* black, int p)
                 }
             }
             if (y == yNew && x > xNew) {
-                for (int xCheck = x - 1; xCheck > xNew + 1; xCheck--) {
+                for (int xCheck = x - 1; xCheck > xNew; xCheck--) {
                     for (int j = 0; j < 16; ++j) {
                         if ((black[j].x == xCheck && black[j].y == y
                              && black[j].alive == 1)
@@ -825,7 +825,7 @@ int RookMove(char str[20], figure* white, figure* black, int p)
                 }
             }
             if (y == yNew && x < xNew) {
-                for (int xCheck = x + 1; xCheck < xNew - 1; xCheck++) {
+                for (int xCheck = x + 1; xCheck < xNew; xCheck++) {
                     for (int j = 0; j < 16; ++j) {
                         if ((black[j].x == xCheck && black[j].y == y
                              && black[j].alive == 1)

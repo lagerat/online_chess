@@ -304,8 +304,71 @@ CTEST(kNight, Incorrect_syntax_kNight_check)
     black[0].alive = 1;
     black[0].flag = 0;
     white[0].name = 'N';
-    int ans = kNightMove("Ne4-a1 f5-f1", white, black, 0);
+    int ans = RookMove("Ne4-a1 f5-f1", white, black, 0);
     ASSERT_EQUAL(13, ans);
+}
+
+CTEST(Rook, Correct_syntax_Rook_check)
+{
+    for (int j = 0; j < 16; ++j) {
+        black[j].flag = 0;
+        black[j].alive = 0;
+        white[j].flag = 0;
+        white[j].alive = 0;
+    }
+    white[0].x = 4;
+    white[0].y = 4;
+    white[0].alive = 1;
+    white[0].flag = 0;
+    black[0].x = 4;
+    black[0].y = 1;
+    black[0].alive = 1;
+    black[0].flag = 0;
+    white[0].name = 'R';
+    int ans = RookMove("Re4xe7 f5-f1", white, black, 0);
+    ASSERT_EQUAL(0, ans);
+}
+
+CTEST(Rook, Correct_syntax_Rook_check2)
+{
+    for (int j = 0; j < 16; ++j) {
+        black[j].flag = 0;
+        black[j].alive = 0;
+        white[j].flag = 0;
+        white[j].alive = 0;
+    }
+    white[0].x = 4;
+    white[0].y = 4;
+    white[0].alive = 1;
+    white[0].flag = 0;
+    black[0].x = 3;
+    black[0].y = 1;
+    black[0].alive = 1;
+    black[0].flag = 0;
+    white[0].name = 'R';
+    int ans = RookMove("Re4-b4 f5-f1", white, black, 0);
+    ASSERT_EQUAL(0, ans);
+}
+
+CTEST(Rook, Incorrect_syntax_Rook_check)
+{
+    for (int j = 0; j < 16; ++j) {
+        black[j].flag = 0;
+        black[j].alive = 0;
+        white[j].flag = 0;
+        white[j].alive = 0;
+    }
+    white[0].x = 4;
+    white[0].y = 4;
+    white[0].alive = 1;
+    white[0].flag = 0;
+    black[0].x = 4;
+    black[0].y = 1;
+    black[0].alive = 1;
+    black[0].flag = 0;
+    white[0].name = 'R';
+    int ans = RookMove("Re4-e8 f5-f1", white, black, 0);
+    ASSERT_EQUAL(7, ans);
 }
 
 int main(int argc, const char* argv[])
