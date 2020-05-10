@@ -434,6 +434,90 @@ CTEST(Bishop, Incorrect_syntax_Bishop_check)
     ASSERT_EQUAL(7, ans);
 }
 
+CTEST(Queen, Correct_syntax_Queen_check)
+{
+    for (int j = 0; j < 16; ++j) {
+        black[j].flag = 0;
+        black[j].alive = 0;
+        white[j].flag = 0;
+        white[j].alive = 0;
+    }
+    white[0].x = 4;
+    white[0].y = 4;
+    white[0].alive = 1;
+    white[0].flag = 0;
+    black[0].x = 3;
+    black[0].y = 3;
+    black[0].alive = 1;
+    black[0].flag = 0;
+    white[0].name = 'Q';
+    int ans = QueenMove("Qe4xd5 f5-f1", white, black, 0);
+    ASSERT_EQUAL(0, ans);
+}
+
+CTEST(Queen, Correct_syntax_Queen_check2)
+{
+    for (int j = 0; j < 16; ++j) {
+        black[j].flag = 0;
+        black[j].alive = 0;
+        white[j].flag = 0;
+        white[j].alive = 0;
+    }
+    white[0].x = 4;
+    white[0].y = 4;
+    white[0].alive = 1;
+    white[0].flag = 0;
+    black[0].x = 4;
+    black[0].y = 2;
+    black[0].alive = 1;
+    black[0].flag = 0;
+    white[0].name = 'Q';
+    int ans = QueenMove("Qe4xe6 f5-f1", white, black, 0);
+    ASSERT_EQUAL(0, ans);
+}
+
+CTEST(Queen, Incorrect_syntax_Queen_check)
+{
+    for (int j = 0; j < 16; ++j) {
+        black[j].flag = 0;
+        black[j].alive = 0;
+        white[j].flag = 0;
+        white[j].alive = 0;
+    }
+    white[0].x = 4;
+    white[0].y = 4;
+    white[0].alive = 1;
+    white[0].flag = 0;
+    black[0].x = 4;
+    black[0].y = 2;
+    black[0].alive = 1;
+    black[0].flag = 0;
+    white[0].name = 'Q';
+    int ans = QueenMove("Qe4-e7 f5-f1", white, black, 0);
+    ASSERT_EQUAL(7, ans);
+}
+
+CTEST(Queen, Incorrect_syntax_Queen_check2)
+{
+    for (int j = 0; j < 16; ++j) {
+        black[j].flag = 0;
+        black[j].alive = 0;
+        white[j].flag = 0;
+        white[j].alive = 0;
+    }
+    white[0].x = 4;
+    white[0].y = 4;
+    white[0].alive = 1;
+    white[0].flag = 0;
+    black[0].x = 4;
+    black[0].y = 2;
+    black[0].alive = 1;
+    black[0].flag = 0;
+    white[0].name = 'Q';
+    int ans = QueenMove("Qe4-c3 f5-f1", white, black, 0);
+    ASSERT_EQUAL(13, ans);
+}
+
 int main(int argc, const char* argv[])
 {
     return ctest_main(argc, argv);
