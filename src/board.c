@@ -1108,7 +1108,7 @@ int kNightMove(char str[20], figure* white, figure* black, int p)
                 return 6;
             }
             if (p < 7) {
-                if (white[c].name != 'B' && white[c].name != 'b') {
+                if (white[c].name != 'N' && white[c].name != 'n') {
                     status = 12;
                     return 12;
                 }
@@ -1116,7 +1116,7 @@ int kNightMove(char str[20], figure* white, figure* black, int p)
                 white[c].x = xNew;
                 black[o].alive = 0;
             } else if (p >= 7) {
-                if (black[c].name != 'B' && black[c].name != 'b') {
+                if (black[c].name != 'N' && black[c].name != 'n') {
                     status = 12;
                     return 12;
                 }
@@ -1128,6 +1128,9 @@ int kNightMove(char str[20], figure* white, figure* black, int p)
             status = 13;
             return 13;
         }
+    } else {
+        status = 5;
+        return 5;
     }
     return 0;
 }

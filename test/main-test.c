@@ -7,31 +7,31 @@
 struct figure white[16];
 struct figure black[16];
 
-CTEST(suite1, testDefenitionX1)
+CTEST(Field, correct_syntax_DefenitionX_check)
 {
     int ans = defenitionX('a');
     ASSERT_EQUAL(0, ans);
 }
 
-CTEST(suite1, testDefenitionX2)
+CTEST(Field, Incorrect_syntax_DefenitionX_check)
 {
     int ans = defenitionX('z');
     ASSERT_EQUAL(8, ans);
 }
 
-CTEST(suite1, testDefenitionY1)
+CTEST(Field, correct_syntax_DefenitionY_check)
 {
     int ans = defenitionY('5');
     ASSERT_EQUAL(3, ans);
 }
 
-CTEST(suite1, testDefenitionY2)
+CTEST(Field, Incorrect_syntax_DefenitionY_check)
 {
     int ans = defenitionY('9');
     ASSERT_EQUAL(8, ans);
 }
 
-CTEST(suite2, WPawnMove1)
+CTEST(pawn, Correct_syntax_White_Pawn_check)
 {
     for (int j = 0; j < 16; ++j) {
         black[j].flag = 0;
@@ -56,7 +56,7 @@ CTEST(suite2, WPawnMove1)
     ASSERT_EQUAL(0, ans);
 }
 
-CTEST(suite2, WPawnMove2)
+CTEST(pawn, Correct_syntax_White_Pawn_check2)
 {
     for (int j = 0; j < 16; ++j) {
         black[j].flag = 0;
@@ -77,7 +77,7 @@ CTEST(suite2, WPawnMove2)
     ASSERT_EQUAL(0, ans);
 }
 
-CTEST(suite2, WPawnMove3)
+CTEST(pawn, Incorrect_syntax_White_Pawn_check)
 {
     for (int j = 0; j < 16; ++j) {
         black[j].flag = 0;
@@ -98,7 +98,7 @@ CTEST(suite2, WPawnMove3)
     ASSERT_EQUAL(2, ans);
 }
 
-CTEST(suite2, BPawnMove1)
+CTEST(pawn, Correct_syntax_Black_Pawn_check)
 {
     for (int j = 0; j < 16; ++j) {
         black[j].flag = 0;
@@ -119,7 +119,7 @@ CTEST(suite2, BPawnMove1)
     ASSERT_EQUAL(0, ans);
 }
 
-CTEST(suite2, BPawnMove2)
+CTEST(pawn, Correct_syntax_Black_Pawn_check2)
 {
     for (int j = 0; j < 16; ++j) {
         black[j].flag = 0;
@@ -140,7 +140,7 @@ CTEST(suite2, BPawnMove2)
     ASSERT_EQUAL(0, ans);
 }
 
-CTEST(suite2, BPawnMove3)
+CTEST(pawn, Incorrect_syntax_Black_Pawn_check)
 {
     for (int j = 0; j < 16; ++j) {
         black[j].flag = 0;
@@ -161,7 +161,7 @@ CTEST(suite2, BPawnMove3)
     ASSERT_EQUAL(2, ans);
 }
 
-CTEST(suite2, PresenceFigure)
+CTEST(pawn, PresenceFigure)
 {
     for (int j = 0; j < 16; ++j) {
         black[j].flag = 0;
@@ -182,7 +182,7 @@ CTEST(suite2, PresenceFigure)
     ASSERT_EQUAL(6, ans);
 }
 
-CTEST(suite3, KingMove1)
+CTEST(king, Correct_syntax_king_check)
 {
     for (int j = 0; j < 16; ++j) {
         black[j].flag = 0;
@@ -203,7 +203,7 @@ CTEST(suite3, KingMove1)
     ASSERT_EQUAL(0, ans);
 }
 
-CTEST(suite3, KingMove2)
+CTEST(king, Correct_syntax_king_check2)
 {
     for (int j = 0; j < 16; ++j) {
         black[j].flag = 0;
@@ -224,7 +224,7 @@ CTEST(suite3, KingMove2)
     ASSERT_EQUAL(0, ans);
 }
 
-CTEST(suite3, KingMove3)
+CTEST(king, Incorrect_syntax_king_check)
 {
     for (int j = 0; j < 16; ++j) {
         black[j].flag = 0;
@@ -242,6 +242,69 @@ CTEST(suite3, KingMove3)
     black[0].flag = 0;
     white[0].name = 'K';
     int ans = KingMove("Ke4-a1 f5-f1", white, black, 0);
+    ASSERT_EQUAL(13, ans);
+}
+
+CTEST(kNight, Correct_syntax_kNight_check)
+{
+    for (int j = 0; j < 16; ++j) {
+        black[j].flag = 0;
+        black[j].alive = 0;
+        white[j].flag = 0;
+        white[j].alive = 0;
+    }
+    white[0].x = 4;
+    white[0].y = 4;
+    white[0].alive = 1;
+    white[0].flag = 0;
+    black[0].x = 2;
+    black[0].y = 3;
+    black[0].alive = 1;
+    black[0].flag = 0;
+    white[0].name = 'N';
+    int ans = kNightMove("Ne4xc5 f5-f1", white, black, 0);
+    ASSERT_EQUAL(0, ans);
+}
+
+CTEST(kNight, Correct_syntax_kNight_check2)
+{
+    for (int j = 0; j < 16; ++j) {
+        black[j].flag = 0;
+        black[j].alive = 0;
+        white[j].flag = 0;
+        white[j].alive = 0;
+    }
+    white[0].x = 4;
+    white[0].y = 4;
+    white[0].alive = 1;
+    white[0].flag = 0;
+    black[0].x = 2;
+    black[0].y = 3;
+    black[0].alive = 1;
+    black[0].flag = 0;
+    white[0].name = 'N';
+    int ans = kNightMove("Ne4-f6 f5-f1", white, black, 0);
+    ASSERT_EQUAL(0, ans);
+}
+
+CTEST(kNight, Incorrect_syntax_kNight_check)
+{
+    for (int j = 0; j < 16; ++j) {
+        black[j].flag = 0;
+        black[j].alive = 0;
+        white[j].flag = 0;
+        white[j].alive = 0;
+    }
+    white[0].x = 4;
+    white[0].y = 4;
+    white[0].alive = 1;
+    white[0].flag = 0;
+    black[0].x = 2;
+    black[0].y = 3;
+    black[0].alive = 1;
+    black[0].flag = 0;
+    white[0].name = 'N';
+    int ans = kNightMove("Ne4-a1 f5-f1", white, black, 0);
     ASSERT_EQUAL(13, ans);
 }
 
