@@ -371,6 +371,69 @@ CTEST(Rook, Incorrect_syntax_Rook_check)
     ASSERT_EQUAL(7, ans);
 }
 
+CTEST(Bishop, Correct_syntax_Bishop_check)
+{
+    for (int j = 0; j < 16; ++j) {
+        black[j].flag = 0;
+        black[j].alive = 0;
+        white[j].flag = 0;
+        white[j].alive = 0;
+    }
+    white[0].x = 4;
+    white[0].y = 4;
+    white[0].alive = 1;
+    white[0].flag = 0;
+    black[0].x = 2;
+    black[0].y = 6;
+    black[0].alive = 1;
+    black[0].flag = 0;
+    white[0].name = 'B';
+    int ans = BishopMove("Be4xc2 f5-f1", white, black, 0);
+    ASSERT_EQUAL(0, ans);
+}
+
+CTEST(Bishop, Correct_syntax_Bishop_check2)
+{
+    for (int j = 0; j < 16; ++j) {
+        black[j].flag = 0;
+        black[j].alive = 0;
+        white[j].flag = 0;
+        white[j].alive = 0;
+    }
+    white[0].x = 4;
+    white[0].y = 4;
+    white[0].alive = 1;
+    white[0].flag = 0;
+    black[0].x = 2;
+    black[0].y = 6;
+    black[0].alive = 1;
+    black[0].flag = 0;
+    white[0].name = 'B';
+    int ans = BishopMove("Be4-c6 f5-f1", white, black, 0);
+    ASSERT_EQUAL(0, ans);
+}
+
+CTEST(Bishop, Incorrect_syntax_Bishop_check)
+{
+    for (int j = 0; j < 16; ++j) {
+        black[j].flag = 0;
+        black[j].alive = 0;
+        white[j].flag = 0;
+        white[j].alive = 0;
+    }
+    white[0].x = 4;
+    white[0].y = 4;
+    white[0].alive = 1;
+    white[0].flag = 0;
+    black[0].x = 3;
+    black[0].y = 3;
+    black[0].alive = 1;
+    black[0].flag = 0;
+    white[0].name = 'B';
+    int ans = BishopMove("Be4-c6 f5-f1", white, black, 0);
+    ASSERT_EQUAL(7, ans);
+}
+
 int main(int argc, const char* argv[])
 {
     return ctest_main(argc, argv);
