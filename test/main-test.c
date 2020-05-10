@@ -157,8 +157,92 @@ CTEST(suite2, BPawnMove3)
     black[0].alive = 1;
     black[0].flag = 0;
     white[0].name = 'P';
-    int ans = WPawnMoves("e4-e7 f5-f1", white, black);
+    int ans = BPawnMoves("e4-e7 d5-d1", white, black, 6);
     ASSERT_EQUAL(2, ans);
+}
+
+CTEST(suite2, PresenceFigure)
+{
+    for (int j = 0; j < 16; ++j) {
+        black[j].flag = 0;
+        black[j].alive = 0;
+        white[j].flag = 0;
+        white[j].alive = 0;
+    }
+    white[0].x = 4;
+    white[0].y = 4;
+    white[0].alive = 1;
+    white[0].flag = 0;
+    black[0].x = 3;
+    black[0].y = 3;
+    black[0].alive = 1;
+    black[0].flag = 0;
+    white[0].name = 'P';
+    int ans = BPawnMoves("e4-e7 f5-f1", white, black, 6);
+    ASSERT_EQUAL(6, ans);
+}
+
+CTEST(suite3, KingMove1)
+{
+    for (int j = 0; j < 16; ++j) {
+        black[j].flag = 0;
+        black[j].alive = 0;
+        white[j].flag = 0;
+        white[j].alive = 0;
+    }
+    white[0].x = 4;
+    white[0].y = 4;
+    white[0].alive = 1;
+    white[0].flag = 0;
+    black[0].x = 3;
+    black[0].y = 3;
+    black[0].alive = 1;
+    black[0].flag = 0;
+    white[0].name = 'K';
+    int ans = KingMove("Ke4xd5 f5-f1", white, black, 0);
+    ASSERT_EQUAL(0, ans);
+}
+
+CTEST(suite3, KingMove2)
+{
+    for (int j = 0; j < 16; ++j) {
+        black[j].flag = 0;
+        black[j].alive = 0;
+        white[j].flag = 0;
+        white[j].alive = 0;
+    }
+    white[0].x = 4;
+    white[0].y = 4;
+    white[0].alive = 1;
+    white[0].flag = 0;
+    black[0].x = 3;
+    black[0].y = 3;
+    black[0].alive = 1;
+    black[0].flag = 0;
+    white[0].name = 'K';
+    int ans = KingMove("Ke4-e5 f5-f1", white, black, 0);
+    ASSERT_EQUAL(0, ans);
+}
+
+CTEST(suite3, KingMove3)
+{
+    for (int j = 0; j < 16; ++j) {
+        black[j].flag = 0;
+        black[j].alive = 0;
+        white[j].flag = 0;
+        white[j].alive = 0;
+    }
+    white[0].x = 4;
+    white[0].y = 4;
+    white[0].alive = 1;
+    white[0].flag = 0;
+    black[0].x = 3;
+    black[0].y = 3;
+    black[0].alive = 1;
+    black[0].flag = 0;
+    white[0].name = 'K';
+    int ans = KingMove("Ke4-a1 f5-f1", white, black, 0);
+    ASSERT_EQUAL(13, ans);
 }
 
 int main(int argc, const char* argv[])
