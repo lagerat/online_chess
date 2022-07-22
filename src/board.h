@@ -1,25 +1,23 @@
-#ifndef BOARD_H
-#define BOARD_H
+#ifndef CHESSSFMLBOARD_BOARD_H
+#define CHESSSFMLBOARD_BOARD_H
 
-typedef struct figure {
-    char name;
-    int x, y;
-    char flag;
-    char alive;
-} figure;
+#include "figure.h"
+#include <vector>
 
-int figureType(char str[20], figure* white, figure* black, int p);
-int RookMove(char str[20], figure* white, figure* black, int p);
-int QueenMove(char str[20], figure* white, figure* black, int p);
-int BishopMove(char str[20], figure* white, figure* black, int p);
-int KingMove(char str[20], figure* white, figure* black, int p);
-int kNightMove(char str[20], figure* white, figure* black, int p);
-int WPawnMoves(char str[20], figure* white, figure* black);
-int BPawnMoves(char str[20], figure* white, figure* black, int p);
-int defenitionX(char symbol);
-int defenitionY(char symbol);
-int board();
-
-#endif // BOARD_H
+class board {
+public:
+    sf::Texture boardTexture;
+    sf::Sprite boardSprite;
+    std::vector<figure*> whiteFigure;
+    std::vector<figure*> blackFigure;
+    board();
+    ~board();
+    void fillBoard();
+    void draw(sf::RenderWindow &window);
+    std::vector<std::pair<int,int>> findAllMoves(figure* choosenFigure);
+private:
+    const int sizeCell = 56;
+};
 
 
+#endif //CHESSSFMLBOARD_BOARD_H

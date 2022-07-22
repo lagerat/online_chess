@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.19)
-project(chessviz)
+project(chessSFMLboard)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(chessviz src/main.c src/board.c src/board_print.c src/board.h src/board_print.h )
+find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
+
+add_executable(chessSFMLboard src/main.cpp src/board.cpp src/board.h src/figure.cpp src/figure.h)
+
+target_link_libraries(chessSFMLboard sfml-graphics sfml-audio)
+
