@@ -504,6 +504,7 @@ int king::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackF
             return 1;
         }
     }
+    //Check on possible move
     if (abs(newCoordinate.x - this->x) > 1 || abs(newCoordinate.y - this->y) > 1){
         return 1;
     }
@@ -520,7 +521,6 @@ int king::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackF
             figure *checkingFigure = blackFigure[0];
             blackFigure.erase(blackFigure.begin());
             if(!checkingFigure->move(whiteFigure,blackFigure,newCoordinate, true)){
-//                   blackFigure.push_back((*blackEnemy));
                 blackFigure.push_back(blackEnemyPointer);
                 whiteFigure.pop_back();
                 this->setCoordinate(oldPosition);
@@ -528,6 +528,9 @@ int king::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackF
                 return 1;
             }
             blackFigure.push_back(checkingFigure);
+        }
+        if (testCheck){
+            blackFigure.push_back(blackEnemyPointer);
         }
         whiteFigure.pop_back();
     } else if (!isWhite && whiteEnemyFind){
@@ -544,6 +547,9 @@ int king::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackF
                 return 1;
             }
             whiteFigure.push_back(checkingFigure);
+        }
+        if (testCheck){
+            whiteFigure.push_back(*whiteEnemy);
         }
         blackFigure.pop_back();
     } else if (!blackEnemyFind && !whiteEnemyFind){
@@ -582,7 +588,7 @@ int king::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackF
     if (!testCheck){
         isMoved = true;
     }
-    return finalMove(whiteFigure,blackFigure,newCoordinate);
+    return finalMove(whiteFigure,blackFigure,newCoordinate,testCheck);
 }
 
 queen::queen(bool isWhite) {
