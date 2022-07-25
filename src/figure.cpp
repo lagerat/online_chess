@@ -540,7 +540,7 @@ int king::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackF
             figure *checkingFigure = whiteFigure[0];
             whiteFigure.erase(whiteFigure.begin());
             if(!checkingFigure->move(whiteFigure,blackFigure,newCoordinate, true)){
-                whiteFigure.push_back((*blackEnemy));
+                whiteFigure.push_back((*whiteEnemy));
                 blackFigure.pop_back();
                 this->setCoordinate(oldPosition);
                 whiteFigure.push_back(checkingFigure);
