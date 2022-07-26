@@ -8,22 +8,20 @@ figure::figure() {
     figuresTextures.loadFromFile("../images/figures.png");
 }
 
-int figure::getX() {
+int figure::getX() const {
     return this->x;
 }
 
-int figure::getY() {
+int figure::getY() const {
     return this->y;
 }
 
 void figure::setX(int x) {
     this->x = x;
-    return;
 }
 
 void figure::setY(int y) {
     this->y = y;
-    return;
 }
 
 void figure::setCoordinate(sf::Vector2i coordinate) {
@@ -31,14 +29,13 @@ void figure::setCoordinate(sf::Vector2i coordinate) {
     this->y = coordinate.y;
 }
 
-void figure::draw(sf::RenderWindow &window) {
+void figure::draw(sf::RenderWindow &window) const {
     window.draw(chessFigureSprite);
-    return;
 }
 
 int
 figure::finalMove(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackFigure, sf::Vector2i &newCoordinate,
-                  bool testCheck) {
+                  bool testCheck) const {
     auto whiteEnemy = whiteFigure.begin();
     auto blackEnemy = blackFigure.begin();
     bool blackEnemyFind = false;
@@ -63,7 +60,7 @@ figure::finalMove(std::vector<figure *> &whiteFigure, std::vector<figure *> &bla
     if ((isWhite && !blackEnemyFind) || (!isWhite && !whiteEnemyFind)){
         return 1;
     } else {
-        figure* enemyFigure = nullptr;
+        figure* enemyFigure;
         if (testCheck){
             return 0;
         }
@@ -82,8 +79,8 @@ figure::finalMove(std::vector<figure *> &whiteFigure, std::vector<figure *> &bla
 }
 
 void figure::dropAsile(std::vector<figure *> &figure) {
-    for (auto it = figure.begin(); it != figure.end(); it++){
-        (*it)->takingOnAsileIsPossible = false;
+    for (auto & it : figure){
+        it->takingOnAsileIsPossible = false;
     }
 }
 
@@ -98,14 +95,14 @@ int whitePawn::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &b
     bool ceilIsEmpty = true;
     if ((this->y - newCoordinate.y == 2 || this->y - newCoordinate.y == 1)  && newCoordinate.x == this->x){
         for (int i = 0; i < this->y - newCoordinate.y ; i++) {
-            for(auto it = whiteFigure.begin(); it != whiteFigure.end(); it++){
-                if ((*it)->getY() == newCoordinate.y + i && (*it)->getX() == newCoordinate.x){
+            for(auto & it : whiteFigure){
+                if (it->getY() == newCoordinate.y + i && it->getX() == newCoordinate.x){
                     ceilIsEmpty = false;
                     break;
                 }
             }
-            for (auto it = blackFigure.begin(); it != blackFigure.end(); it++){
-                if ((*it)->getY() == newCoordinate.y + i && (*it)->getX() == newCoordinate.x){
+            for (auto & it : blackFigure){
+                if (it->getY() == newCoordinate.y + i && it->getX() == newCoordinate.x){
                     ceilIsEmpty = false;
                     break;
                 }
@@ -128,9 +125,9 @@ int whitePawn::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &b
         }
         return 0;
     } else if (this->y - newCoordinate.y == 1 && abs(this->x - newCoordinate.x) == 1){
-        figure* enemyFigure = nullptr;
-        for(auto it = whiteFigure.begin(); it != whiteFigure.end(); it++){
-            if ((*it)->getY() == newCoordinate.y && (*it)->getX() == newCoordinate.x){
+        figure* enemyFigure;
+        for(auto & it : whiteFigure){
+            if (it->getY() == newCoordinate.y && it->getX() == newCoordinate.x){
                 return 1;
             }
         }
@@ -175,14 +172,14 @@ int blackPawn::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &b
     bool ceilIsEmpty = true;
     if ((newCoordinate.y - this->y == 2 || newCoordinate.y - this->y == 1)  && newCoordinate.x == this->x){
         for (int i = 0; i < newCoordinate.y - this->y ; i++) {
-            for(auto it = whiteFigure.begin(); it != whiteFigure.end(); it++){
-                if ((*it)->getY() == newCoordinate.y - i && (*it)->getX() == newCoordinate.x){
+            for(auto & it : whiteFigure){
+                if (it->getY() == newCoordinate.y - i && it->getX() == newCoordinate.x){
                     ceilIsEmpty = false;
                     break;
                 }
             }
-            for (auto it = blackFigure.begin(); it != blackFigure.end(); it++){
-                if ((*it)->getY() == newCoordinate.y - i && (*it)->getX() == newCoordinate.x){
+            for (auto & it : blackFigure){
+                if (it->getY() == newCoordinate.y - i && it->getX() == newCoordinate.x){
                     ceilIsEmpty = false;
                     break;
                 }
@@ -205,9 +202,9 @@ int blackPawn::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &b
         }
         return 0;
     } else if (newCoordinate.y - this->y == 1 && abs(newCoordinate.x - this->x) == 1){
-        figure* enemyFigure = nullptr;
-        for(auto it = blackFigure.begin(); it != blackFigure.end(); it++){
-            if ((*it)->getY() == newCoordinate.y && (*it)->getX() == newCoordinate.x){
+        figure* enemyFigure;
+        for(auto & it : blackFigure){
+            if (it->getY() == newCoordinate.y && it->getX() == newCoordinate.x){
                 return 1;
             }
         }
@@ -238,7 +235,6 @@ int blackPawn::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &b
     } else {
         return 1;
     }
-    return 0;
 }
 
 bishop::bishop(bool isWhite) {
@@ -264,13 +260,13 @@ int bishop::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blac
     int abciss = this->x;
     int ordinate = this->y;
     while (abciss != newCoordinate.x && ordinate != newCoordinate.y){
-        for(auto it = whiteFigure.begin(); it != whiteFigure.end(); it++){
-            if ((*it)->getY() == ordinate && (*it)->getX() == abciss){
+        for(auto & it : whiteFigure){
+            if (it->getY() == ordinate && it->getX() == abciss){
                 return 1;
             }
         }
-        for(auto it = blackFigure.begin(); it != blackFigure.end(); it++){
-            if ((*it)->getY() == ordinate && (*it)->getX() == abciss){
+        for(auto & it : blackFigure){
+            if (it->getY() == ordinate && it->getX() == abciss){
                 return 1;
             }
         }
@@ -343,13 +339,13 @@ int rook::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackF
     }
     int i = this->x;
     while (i != newCoordinate.x){
-        for(auto it = whiteFigure.begin(); it != whiteFigure.end(); it++){
-            if ((*it)->getY() == newCoordinate.y && (*it)->getX() == i){
+        for(auto & it : whiteFigure){
+            if (it->getY() == newCoordinate.y && it->getX() == i){
                 return 1;
             }
         }
-        for(auto it = blackFigure.begin(); it != blackFigure.end(); it++){
-            if ((*it)->getY() == newCoordinate.y && (*it)->getX() == i){
+        for(auto & it : blackFigure){
+            if (it->getY() == newCoordinate.y && it->getX() == i){
                 return 1;
             }
         }
@@ -361,13 +357,13 @@ int rook::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackF
     }
     i = this->y;
     while (i != newCoordinate.y){
-        for(auto it = whiteFigure.begin(); it != whiteFigure.end(); it++){
-            if ((*it)->getX() == newCoordinate.x && (*it)->getY() == i){
+        for(auto & it : whiteFigure){
+            if (it->getX() == newCoordinate.x && it->getY() == i){
                 return 1;
             }
         }
-        for(auto it = blackFigure.begin(); it != blackFigure.end(); it++){
-            if ((*it)->getX() == newCoordinate.x && (*it)->getY() == i){
+        for(auto & it : blackFigure){
+            if (it->getX() == newCoordinate.x && it->getY() == i){
                 return 1;
             }
         }
@@ -614,9 +610,8 @@ int queen::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &black
     bishopForCheckMove->setY(this->y);
     rookForMove->setX(this->x);
     rookForMove->setY(this->y);
-    if (!bishopForCheckMove->move(whiteFigure,blackFigure,newCoordinate,testCheck)){
-        return 0;
-    }else if (!rookForMove->move(whiteFigure,blackFigure,newCoordinate,testCheck)){
+    if (!bishopForCheckMove->move(whiteFigure,blackFigure,newCoordinate,testCheck) ||
+                !rookForMove->move(whiteFigure,blackFigure,newCoordinate,testCheck)){
         return 0;
     } else{
         return 1;

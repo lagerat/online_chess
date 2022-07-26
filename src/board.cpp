@@ -7,12 +7,10 @@ board::board() {
     fillBoard();
 }
 board::~board() {
-    for(auto it = whiteFigure.begin(); it != whiteFigure.end(); it++){
-        figure* del = (*it);
+    for(auto del : whiteFigure){
         delete del;
     }
-    for (auto it = blackFigure.begin(); it != blackFigure.end(); it++){
-        figure* del = (*it);
+    for (auto del : blackFigure){
         delete del;
     }
 }
@@ -112,15 +110,16 @@ void board::fillBoard() {
 
 void board::draw(sf::RenderWindow &window) {
     window.draw(boardSprite);
-    for(auto it = whiteFigure.begin(); it != whiteFigure.end(); it++){
-        (*it)->chessFigureSprite.setPosition((*it)->getX() * sizeCell + 27,(*it)->getY() * sizeCell + 27);
-        (*it)->draw(window);
+    for(auto & it : whiteFigure){
+        it->chessFigureSprite.setPosition((float)it->getX() * (float)sizeCell + 27,
+                                          (float)it->getY() * (float)sizeCell + 27);
+        it->draw(window);
     }
-    for (auto it = blackFigure.begin(); it != blackFigure.end(); it++){
-        (*it)->chessFigureSprite.setPosition((*it)->getX() * sizeCell + 27,(*it)->getY() * sizeCell + 27);
-        (*it)->draw(window);
+    for (auto & it : blackFigure){
+        it->chessFigureSprite.setPosition((float)it->getX() * (float)sizeCell + 27,
+                                          (float)it->getY() * (float)sizeCell + 27);
+        it->draw(window);
     }
-    return;
 }
 
 std::vector<std::pair<int, int>> board::findAllMoves(figure *choosenFigure) {

@@ -1,5 +1,5 @@
-#ifndef CHESSSFMLBOARD_FIGURE_H
-#define CHESSSFMLBOARD_FIGURE_H
+#ifndef ONLINECHESS_FIGURE_H
+#define ONLINECHESS_FIGURE_H
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -9,12 +9,12 @@ public:
     figure();
     virtual int move(std::vector<figure*> &whiteFigure,std::vector<figure*> &blackFigure,
                      sf::Vector2i newCoordinate,bool testCheck = false) = 0;
-    int getX();
-    int getY();
+    int getX() const;
+    int getY() const;
     void setX(int x);
     void setY(int y);
     void setCoordinate(sf::Vector2i coordinate);
-    void draw(sf::RenderWindow &window);
+    void draw(sf::RenderWindow &window) const;
     sf::Sprite chessFigureSprite;
     bool takingOnAsileIsPossible = false;
 protected:
@@ -23,8 +23,8 @@ protected:
     const int size = 56;
     bool isWhite;
     int finalMove(std::vector<figure*> &whiteFigure, std::vector<figure*> &blackFigure,
-                  sf::Vector2i &newCoordinate,bool testCheck = false);
-    void dropAsile(std::vector<figure*> &figure);
+                  sf::Vector2i &newCoordinate,bool testCheck = false) const;
+    static void dropAsile(std::vector<figure*> &figure);
 };
 
 class whitePawn : public figure {
@@ -47,14 +47,14 @@ private:
 
 class bishop : public figure{
 public:
-    bishop(bool isWhite);
+    explicit bishop(bool isWhite);
     int move(std::vector<figure*> &whiteFigure,std::vector<figure*> &blackFigure,
              sf::Vector2i newCoordinate,bool testCheck = false) override;
 };
 
 class kNight : public figure{
 public:
-    kNight(bool isWhite);
+    explicit kNight(bool isWhite);
     int move(std::vector<figure*> &whiteFigure,std::vector<figure*> &blackFigure,
              sf::Vector2i newCoordinate,bool testCheck = false) override;
 };
@@ -63,7 +63,7 @@ class rook : public figure{
 public:
     bool isMoved = false;
 
-    rook(bool isWhite);
+    explicit rook(bool isWhite);
     int move(std::vector<figure*> &whiteFigure,std::vector<figure*> &blackFigure,
              sf::Vector2i newCoordinate,bool testCheck = false) override;
 
@@ -71,7 +71,7 @@ public:
 
 class king :public figure{
 public:
-    king(bool isWhite);
+    explicit king(bool isWhite);
     int move(std::vector<figure*> &whiteFigure,std::vector<figure*> &blackFigure,
              sf::Vector2i newCoordinate,bool testCheck = false) override;
 
@@ -81,7 +81,7 @@ private:
 
 class queen : public figure{
 public:
-    queen(bool isWhite);
+    explicit queen(bool isWhite);
     int move(std::vector<figure*> &whiteFigure,std::vector<figure*> &blackFigure,
              sf::Vector2i newCoordinate,bool testCheck = false) override;
 
@@ -90,4 +90,4 @@ private:
     rook *rookForMove;
 };
 
-#endif //CHESSSFMLBOARD_FIGURE_H
+#endif //ONLINECHESS_FIGURE_H

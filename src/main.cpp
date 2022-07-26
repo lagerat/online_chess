@@ -7,7 +7,7 @@ std::vector<sf::CircleShape> createCircleShapes(std::vector<std::pair<int,int>> 
         sf::CircleShape tmp(20.f);
         tmp.setOrigin(-10.f,-10.f);
         tmp.setFillColor(sf::Color(153,255,51,150));
-        tmp.setPosition(it.first * 56 + 27, it.second * 56 + 27);
+        tmp.setPosition((float)it.first * 56 + 27, (float)it.second * 56 + 27);
         shapesForPossibleMoves.push_back(tmp);
     }
     return shapesForPossibleMoves;
@@ -24,7 +24,7 @@ int main()
     sf::Font font;
     font.loadFromFile("../fonts/Psilent.otf");
     sf::Text whoMove("",font,30);
-    whoMove.setColor(sf::Color::White);
+    whoMove.setFillColor(sf::Color::White);
     whoMove.setString("White move");
     whoMove.setPosition(600,30);
     figure *choosenFigure = nullptr;
@@ -35,17 +35,17 @@ int main()
     while (window.isOpen())
     {
         sf::Vector2i pos = sf::Mouse::getPosition(window) - sf::Vector2i(28,28);
-        sf::Event event;
+        sf::Event event{};
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
                 window.close();
             if (event.type == sf::Event::MouseButtonPressed)
-                if (event.key.code == sf::Mouse::Left){
+                if (event.mouseButton.button == sf::Mouse::Left){
                     if (whiteMove){
                         for (int i = 0; i < b.whiteFigure.size(); ++i) {
-                            if (b.whiteFigure[i]->chessFigureSprite.getGlobalBounds().contains(pos.x + 28,
-                                                                                               pos.y + 28)) {
+                            if (b.whiteFigure[i]->chessFigureSprite.getGlobalBounds().contains((float)pos.x + 28,
+                                                                                               (float)pos.y + 28)) {
                                 shapesForPossibleMoves.clear();
                                 possibleMoves.clear();
                                 isMove = true;
@@ -58,8 +58,8 @@ int main()
                         }
                     } else{
                         for (int i = 0; i < b.blackFigure.size(); ++i) {
-                            if (b.blackFigure[i]->chessFigureSprite.getGlobalBounds().contains(pos.x + 28,
-                                                                                               pos.y + 28)) {
+                            if (b.blackFigure[i]->chessFigureSprite.getGlobalBounds().contains((float)pos.x + 28,
+                                                                                               (float)pos.y + 28)) {
                                 shapesForPossibleMoves.clear();
                                 possibleMoves.clear();
                                 isMove = true;
@@ -73,7 +73,7 @@ int main()
                     }
                 }
             if (event.type == sf::Event::MouseButtonReleased)
-                if (event.key.code == sf::Mouse::Left){
+                if (event.mouseButton.button == sf::Mouse::Left){
                     shapesForPossibleMoves.clear();
                     if (choosenFigure){
                         if (whiteMove){
@@ -151,7 +151,7 @@ int main()
         b.draw(window);
         window.draw(whoMove);
         if (isMove){
-            choosenFigure->chessFigureSprite.setPosition(pos.x, pos.y);
+            choosenFigure->chessFigureSprite.setPosition((float)pos.x, (float)pos.y);
             choosenFigure->draw(window);
         }
         for(const auto& it: shapesForPossibleMoves){

@@ -1,5 +1,5 @@
-#ifndef CHESSSFMLBOARD_BOARD_H
-#define CHESSSFMLBOARD_BOARD_H
+#ifndef ONLINECHESS_BOARD_H
+#define ONLINECHESS_BOARD_H
 
 #include "figure.h"
 #include <vector>
@@ -20,4 +20,4 @@ private:
 };
 
 
-#endif //CHESSSFMLBOARD_BOARD_H
+#endif //ONLINECHESS_BOARD_H
