@@ -6,11 +6,12 @@ board::board() {
     boardSprite.setTexture(boardTexture);
     fillBoard();
 }
+
 board::~board() {
-    for(auto del : whiteFigure){
+    for (auto del: whiteFigure) {
         delete del;
     }
-    for (auto del : blackFigure){
+    for (auto del: blackFigure) {
         delete del;
     }
 }
@@ -21,20 +22,18 @@ void board::fillBoard() {
     figure *tmp;
     sf::Vector2i coord;
     for (int i = 0; i < 16; ++i) {
-        if (i < 8){
+        if (i < 8) {
             tmp = new blackPawn;
             coord.y = 1;
             coord.x = i;
             tmp->setCoordinate(coord);
             blackFigure.push_back(tmp);
-            tmp = nullptr;
-        } else{
+        } else {
             tmp = new whitePawn;
             coord.y = 6;
             coord.x = i - 8;
             tmp->setCoordinate(coord);
             whiteFigure.push_back(tmp);
-            tmp = nullptr;
         }
     }
     // rook ====================================
@@ -110,28 +109,28 @@ void board::fillBoard() {
 
 void board::draw(sf::RenderWindow &window) {
     window.draw(boardSprite);
-    for(auto & it : whiteFigure){
-        it->chessFigureSprite.setPosition((float)it->getX() * (float)sizeCell + 27,
-                                          (float)it->getY() * (float)sizeCell + 27);
+    for (auto &it: whiteFigure) {
+        it->chessFigureSprite.setPosition((float) it->getX() * (float) sizeCell + 27,
+                                          (float) it->getY() * (float) sizeCell + 27);
         it->draw(window);
     }
-    for (auto & it : blackFigure){
-        it->chessFigureSprite.setPosition((float)it->getX() * (float)sizeCell + 27,
-                                          (float)it->getY() * (float)sizeCell + 27);
+    for (auto &it: blackFigure) {
+        it->chessFigureSprite.setPosition((float) it->getX() * (float) sizeCell + 27,
+                                          (float) it->getY() * (float) sizeCell + 27);
         it->draw(window);
     }
 }
 
 std::vector<std::pair<int, int>> board::findAllMoves(figure *choosenFigure) {
-    std::vector<std::pair<int,int>> possibleMoves;
+    std::vector<std::pair<int, int>> possibleMoves;
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
-            if (choosenFigure->getX() == j && choosenFigure->getY() == i){
+            if (choosenFigure->getX() == j && choosenFigure->getY() == i) {
                 continue;
             }
-            bool answ = choosenFigure->move(whiteFigure,blackFigure,sf::Vector2i(j,i), true);
-            if (answ == 0){
-                possibleMoves.emplace_back(j,i);
+            bool answ = choosenFigure->move(whiteFigure, blackFigure, sf::Vector2i(j, i), true);
+            if (answ == 0) {
+                possibleMoves.emplace_back(j, i);
             }
         }
     }

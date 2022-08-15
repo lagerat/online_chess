@@ -1,8 +1,8 @@
 #include "figure.h"
 
-#include <SFML/Audio.hpp>
-#include <SFML/Graphics.hpp>
-#include <iostream>
+//#include <SFML/Audio.hpp>
+//#include <SFML/Graphics.hpp>
+//#include <iostream>
 
 figure::figure() {
     figuresTextures.loadFromFile("../images/figures.png");
@@ -40,31 +40,31 @@ figure::finalMove(std::vector<figure *> &whiteFigure, std::vector<figure *> &bla
     auto blackEnemy = blackFigure.begin();
     bool blackEnemyFind = false;
     bool whiteEnemyFind = false;
-    for(auto it = whiteFigure.begin(); it != whiteFigure.end(); it++){
-        if ((*it)->getY() == newCoordinate.y && (*it)->getX() == newCoordinate.x){
+    for (auto it = whiteFigure.begin(); it != whiteFigure.end(); it++) {
+        if ((*it)->getY() == newCoordinate.y && (*it)->getX() == newCoordinate.x) {
             whiteEnemy = it;
             whiteEnemyFind = true;
             break;
         }
     }
-    for(auto it = blackFigure.begin(); it != blackFigure.end(); it++){
-        if ((*it)->getY() == newCoordinate.y && (*it)->getX() == newCoordinate.x){
+    for (auto it = blackFigure.begin(); it != blackFigure.end(); it++) {
+        if ((*it)->getY() == newCoordinate.y && (*it)->getX() == newCoordinate.x) {
             blackEnemy = it;
             blackEnemyFind = true;
             break;
         }
     }
-    if (!blackEnemyFind && !whiteEnemyFind){
+    if (!blackEnemyFind && !whiteEnemyFind) {
         return 0;
     }
-    if ((isWhite && !blackEnemyFind) || (!isWhite && !whiteEnemyFind)){
+    if ((isWhite && !blackEnemyFind) || (!isWhite && !whiteEnemyFind)) {
         return 1;
     } else {
-        figure* enemyFigure;
-        if (testCheck){
+        figure *enemyFigure;
+        if (testCheck) {
             return 0;
         }
-        if (isWhite){
+        if (isWhite) {
             enemyFigure = (*blackEnemy);
             blackFigure.erase(blackEnemy);
             delete enemyFigure;
@@ -79,61 +79,65 @@ figure::finalMove(std::vector<figure *> &whiteFigure, std::vector<figure *> &bla
 }
 
 void figure::dropAsile(std::vector<figure *> &figure) {
-    for (auto & it : figure){
+    for (auto &it: figure) {
         it->takingOnAsileIsPossible = false;
     }
 }
 
 whitePawn::whitePawn() {
     chessFigureSprite.setTexture(figuresTextures);
-    chessFigureSprite.setTextureRect(sf::IntRect(56 * 5,56 * 1,56,56));
+    chessFigureSprite.setTextureRect(sf::IntRect(56 * 5, 56 * 1, 56, 56));
     isWhite = true;
 }
 
 int whitePawn::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackFigure, sf::Vector2i newCoordinate,
                     bool testCheck) {
     bool ceilIsEmpty = true;
-    if ((this->y - newCoordinate.y == 2 || this->y - newCoordinate.y == 1)  && newCoordinate.x == this->x){
-        for (int i = 0; i < this->y - newCoordinate.y ; i++) {
-            for(auto & it : whiteFigure){
-                if (it->getY() == newCoordinate.y + i && it->getX() == newCoordinate.x){
+    ////////////////////////////////////////////
+    if (newCoordinate.y == this->y && newCoordinate.x == this->x) {
+        return 1;
+    }
+    if ((this->y - newCoordinate.y == 2 || this->y - newCoordinate.y == 1) && newCoordinate.x == this->x) {
+        for (int i = 0; i < this->y - newCoordinate.y; i++) {
+            for (auto &it: whiteFigure) {
+                if (it->getY() == newCoordinate.y + i && it->getX() == newCoordinate.x) {
                     ceilIsEmpty = false;
                     break;
                 }
             }
-            for (auto & it : blackFigure){
-                if (it->getY() == newCoordinate.y + i && it->getX() == newCoordinate.x){
+            for (auto &it: blackFigure) {
+                if (it->getY() == newCoordinate.y + i && it->getX() == newCoordinate.x) {
                     ceilIsEmpty = false;
                     break;
                 }
             }
         }
-        if (!ceilIsEmpty){
+        if (!ceilIsEmpty) {
             return 1;
         }
-        if (!isFirstMove && this->y - newCoordinate.y == 2){
+        if (!isFirstMove && this->y - newCoordinate.y == 2) {
             return 1;
         }
-        if (!testCheck){
+        if (!testCheck) {
             isFirstMove = false;
         }
-        if (this->y - newCoordinate.y == 2 && !testCheck){
+        if (this->y - newCoordinate.y == 2 && !testCheck) {
             takingOnAsileIsPossible = true;
         }
-        if (!testCheck){
+        if (!testCheck) {
             dropAsile(blackFigure);
         }
         return 0;
-    } else if (this->y - newCoordinate.y == 1 && abs(this->x - newCoordinate.x) == 1){
-        figure* enemyFigure;
-        for(auto & it : whiteFigure){
-            if (it->getY() == newCoordinate.y && it->getX() == newCoordinate.x){
+    } else if (this->y - newCoordinate.y == 1 && abs(this->x - newCoordinate.x) == 1) {
+        figure *enemyFigure;
+        for (auto &it: whiteFigure) {
+            if (it->getY() == newCoordinate.y && it->getX() == newCoordinate.x) {
                 return 1;
             }
         }
-        for (auto it = blackFigure.begin(); it != blackFigure.end(); it++){
-            if ((*it)->getY() == newCoordinate.y && (*it)->getX() == newCoordinate.x){
-                if(testCheck){
+        for (auto it = blackFigure.begin(); it != blackFigure.end(); it++) {
+            if ((*it)->getY() == newCoordinate.y && (*it)->getX() == newCoordinate.x) {
+                if (testCheck) {
                     return 0;
                 }
                 enemyFigure = (*it);
@@ -141,9 +145,9 @@ int whitePawn::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &b
                 delete enemyFigure;
                 dropAsile(blackFigure);
                 return 0;
-            } else if((*it)->getY() == newCoordinate.y + 1 && (*it)->getX() == newCoordinate.x){
-                if ((*it)->takingOnAsileIsPossible){
-                    if(testCheck){
+            } else if ((*it)->getY() == newCoordinate.y + 1 && (*it)->getX() == newCoordinate.x) {
+                if ((*it)->takingOnAsileIsPossible) {
+                    if (testCheck) {
                         return 0;
                     }
                     enemyFigure = (*it);
@@ -163,54 +167,57 @@ int whitePawn::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &b
 
 blackPawn::blackPawn() {
     chessFigureSprite.setTexture(figuresTextures);
-    chessFigureSprite.setTextureRect(sf::IntRect(56 * 5,0,56,56));
+    chessFigureSprite.setTextureRect(sf::IntRect(56 * 5, 0, 56, 56));
     isWhite = false;
 }
 
 int blackPawn::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackFigure, sf::Vector2i newCoordinate,
                     bool testCheck) {
+    if (newCoordinate.y == this->y && newCoordinate.x == this->x) {
+        return 1;
+    }
     bool ceilIsEmpty = true;
-    if ((newCoordinate.y - this->y == 2 || newCoordinate.y - this->y == 1)  && newCoordinate.x == this->x){
-        for (int i = 0; i < newCoordinate.y - this->y ; i++) {
-            for(auto & it : whiteFigure){
-                if (it->getY() == newCoordinate.y - i && it->getX() == newCoordinate.x){
+    if ((newCoordinate.y - this->y == 2 || newCoordinate.y - this->y == 1) && newCoordinate.x == this->x) {
+        for (int i = 0; i < newCoordinate.y - this->y; i++) {
+            for (auto &it: whiteFigure) {
+                if (it->getY() == newCoordinate.y - i && it->getX() == newCoordinate.x) {
                     ceilIsEmpty = false;
                     break;
                 }
             }
-            for (auto & it : blackFigure){
-                if (it->getY() == newCoordinate.y - i && it->getX() == newCoordinate.x){
+            for (auto &it: blackFigure) {
+                if (it->getY() == newCoordinate.y - i && it->getX() == newCoordinate.x) {
                     ceilIsEmpty = false;
                     break;
                 }
             }
         }
-        if (!ceilIsEmpty){
+        if (!ceilIsEmpty) {
             return 1;
         }
-        if (!isFirstMove && newCoordinate.y - this->y == 2){
+        if (!isFirstMove && newCoordinate.y - this->y == 2) {
             return 1;
         }
-        if (!testCheck){
+        if (!testCheck) {
             isFirstMove = false;
         }
-        if (newCoordinate.y - this->y == 2 && !testCheck){
+        if (newCoordinate.y - this->y == 2 && !testCheck) {
             takingOnAsileIsPossible = true;
         }
-        if (!testCheck){
+        if (!testCheck) {
             dropAsile(whiteFigure);
         }
         return 0;
-    } else if (newCoordinate.y - this->y == 1 && abs(newCoordinate.x - this->x) == 1){
-        figure* enemyFigure;
-        for(auto & it : blackFigure){
-            if (it->getY() == newCoordinate.y && it->getX() == newCoordinate.x){
+    } else if (newCoordinate.y - this->y == 1 && abs(newCoordinate.x - this->x) == 1) {
+        figure *enemyFigure;
+        for (auto &it: blackFigure) {
+            if (it->getY() == newCoordinate.y && it->getX() == newCoordinate.x) {
                 return 1;
             }
         }
-        for (auto it = whiteFigure.begin(); it != whiteFigure.end(); it++){
-            if ((*it)->getY() == newCoordinate.y && (*it)->getX() == newCoordinate.x){
-                if(testCheck){
+        for (auto it = whiteFigure.begin(); it != whiteFigure.end(); it++) {
+            if ((*it)->getY() == newCoordinate.y && (*it)->getX() == newCoordinate.x) {
+                if (testCheck) {
                     return 0;
                 }
                 enemyFigure = (*it);
@@ -218,9 +225,9 @@ int blackPawn::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &b
                 delete enemyFigure;
                 dropAsile(whiteFigure);
                 return 0;
-            } else if((*it)->getY() == newCoordinate.y - 1 && (*it)->getX() == newCoordinate.x){
-                if ((*it)->takingOnAsileIsPossible){
-                    if(testCheck){
+            } else if ((*it)->getY() == newCoordinate.y - 1 && (*it)->getX() == newCoordinate.x) {
+                if ((*it)->takingOnAsileIsPossible) {
+                    if (testCheck) {
                         return 0;
                     }
                     enemyFigure = (*it);
@@ -240,160 +247,193 @@ int blackPawn::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &b
 bishop::bishop(bool isWhite) {
     this->isWhite = isWhite;
     chessFigureSprite.setTexture(figuresTextures);
-    if (!isWhite){
-        chessFigureSprite.setTextureRect(sf::IntRect(56 * 2,0,56,56));
-    } else{
-        chessFigureSprite.setTextureRect(sf::IntRect(56 * 2,56,56,56));
+    if (!isWhite) {
+        chessFigureSprite.setTextureRect(sf::IntRect(56 * 2, 0, 56, 56));
+    } else {
+        chessFigureSprite.setTextureRect(sf::IntRect(56 * 2, 56, 56, 56));
     }
 }
 
 int bishop::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackFigure, sf::Vector2i newCoordinate,
                  bool testCheck) {
-    if (isWhite){
+    if (newCoordinate.y == this->y && newCoordinate.x == this->x) {
+        return 1;
+    }
+    if (isWhite) {
         dropAsile(blackFigure);
-    } else{
+    } else {
         dropAsile(whiteFigure);
     }
-    if (abs(newCoordinate.x - this->x) != abs(newCoordinate.y - this->y)){
+    if (abs(newCoordinate.x - this->x) != abs(newCoordinate.y - this->y)) {
         return 1;
     }
     int abciss = this->x;
     int ordinate = this->y;
-    while (abciss != newCoordinate.x && ordinate != newCoordinate.y){
-        for(auto & it : whiteFigure){
-            if (it->getY() == ordinate && it->getX() == abciss){
+    if (this->x - newCoordinate.x > 0) {
+        abciss--;
+    } else if (this->x - newCoordinate.x < 0) {
+        abciss++;
+    }
+
+    if (this->y - newCoordinate.y > 0) {
+        ordinate--;
+    } else if (this->y - newCoordinate.y < 0) {
+        ordinate++;
+    }
+    while (abciss != newCoordinate.x && ordinate != newCoordinate.y) {
+        for (auto &it: whiteFigure) {
+            if (it->getY() == ordinate && it->getX() == abciss) {
                 return 1;
             }
         }
-        for(auto & it : blackFigure){
-            if (it->getY() == ordinate && it->getX() == abciss){
+        for (auto &it: blackFigure) {
+            if (it->getY() == ordinate && it->getX() == abciss) {
                 return 1;
             }
         }
-        if (newCoordinate.x - this->x > 0){
+        if (newCoordinate.x - this->x > 0) {
             abciss++;
-        } else{
+        } else {
             abciss--;
         }
-        if (newCoordinate.y - this->y > 0){
+        if (newCoordinate.y - this->y > 0) {
             ordinate++;
-        } else{
+        } else {
             ordinate--;
         }
     }
-    return finalMove(whiteFigure, blackFigure, newCoordinate,testCheck);
+    return finalMove(whiteFigure, blackFigure, newCoordinate, testCheck);
 }
 
 kNight::kNight(bool isWhite) {
     this->isWhite = isWhite;
     chessFigureSprite.setTexture(figuresTextures);
-    if (!isWhite){
-        chessFigureSprite.setTextureRect(sf::IntRect(56,0,56,56));
-    } else{
-        chessFigureSprite.setTextureRect(sf::IntRect(56,56,56,56));
+    if (!isWhite) {
+        chessFigureSprite.setTextureRect(sf::IntRect(56, 0, 56, 56));
+    } else {
+        chessFigureSprite.setTextureRect(sf::IntRect(56, 56, 56, 56));
     }
 }
 
 int kNight::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackFigure, sf::Vector2i newCoordinate,
                  bool testCheck) {
-    if (isWhite){
+    if (newCoordinate.y == this->y && newCoordinate.x == this->x) {
+        return 1;
+    }
+    if (isWhite) {
         dropAsile(blackFigure);
-    } else{
+    } else {
         dropAsile(whiteFigure);
     }
     bool correctMove = false;
-    if((abs(newCoordinate.x - this->x) == 1 && abs(newCoordinate.y - this->y) == 2 ) ||
-       abs(newCoordinate.y - this->y) == 1 && abs(newCoordinate.x - this->x) == 2){
+    if ((abs(newCoordinate.x - this->x) == 1 && abs(newCoordinate.y - this->y) == 2) ||
+        abs(newCoordinate.y - this->y) == 1 && abs(newCoordinate.x - this->x) == 2) {
         correctMove = true;
     }
-    if (!correctMove){
+    if (!correctMove) {
         return 1;
     }
-    return finalMove(whiteFigure, blackFigure, newCoordinate,testCheck);
+    return finalMove(whiteFigure, blackFigure, newCoordinate, testCheck);
 }
 
 rook::rook(bool isWhite) {
     this->isWhite = isWhite;
     chessFigureSprite.setTexture(figuresTextures);
-    if (!isWhite){
-        chessFigureSprite.setTextureRect(sf::IntRect(0,0,56,56));
-    } else{
-        chessFigureSprite.setTextureRect(sf::IntRect(0,56,56,56));
+    if (!isWhite) {
+        chessFigureSprite.setTextureRect(sf::IntRect(0, 0, 56, 56));
+    } else {
+        chessFigureSprite.setTextureRect(sf::IntRect(0, 56, 56, 56));
     }
 }
 
 int rook::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackFigure, sf::Vector2i newCoordinate,
                bool testCheck) {
-    if (isWhite){
+    if (newCoordinate.y == this->y && newCoordinate.x == this->x) {
+        return 1;
+    }
+    if (isWhite) {
         dropAsile(whiteFigure);
-    } else{
+    } else {
         dropAsile(blackFigure);
     }
     bool correctMove = false;
     if ((abs(newCoordinate.x - this->x) != 0 && newCoordinate.y == this->y)
-        || (abs(newCoordinate.y - this->y) != 0 && newCoordinate.x == this->x)){
+        || (abs(newCoordinate.y - this->y) != 0 && newCoordinate.x == this->x)) {
         correctMove = true;
     }
-    if (!correctMove){
+    if (!correctMove) {
         return 1;
     }
     int i = this->x;
-    while (i != newCoordinate.x){
-        for(auto & it : whiteFigure){
-            if (it->getY() == newCoordinate.y && it->getX() == i){
+    if (newCoordinate.x - this->x > 0) {
+        i++;
+    } else if (newCoordinate.x - this->x < 0) {
+        i--;
+    }
+    while (i != newCoordinate.x) {
+        for (auto &it: whiteFigure) {
+            if (it->getY() == newCoordinate.y && it->getX() == i) {
                 return 1;
             }
         }
-        for(auto & it : blackFigure){
-            if (it->getY() == newCoordinate.y && it->getX() == i){
+        for (auto &it: blackFigure) {
+            if (it->getY() == newCoordinate.y && it->getX() == i) {
                 return 1;
             }
         }
-        if (newCoordinate.x - this->x > 0){
+        if (newCoordinate.x - this->x > 0) {
             i++;
-        } else{
+        } else {
             i--;
         }
     }
     i = this->y;
-    while (i != newCoordinate.y){
-        for(auto & it : whiteFigure){
-            if (it->getX() == newCoordinate.x && it->getY() == i){
+    if (newCoordinate.y - this->y > 0) {
+        i++;
+    } else if (newCoordinate.y - this->y < 0) {
+        i--;
+    }
+    while (i != newCoordinate.y) {
+        for (auto &it: whiteFigure) {
+            if (it->getX() == newCoordinate.x && it->getY() == i) {
                 return 1;
             }
         }
-        for(auto & it : blackFigure){
-            if (it->getX() == newCoordinate.x && it->getY() == i){
+        for (auto &it: blackFigure) {
+            if (it->getX() == newCoordinate.x && it->getY() == i) {
                 return 1;
             }
         }
-        if (newCoordinate.y - this->y > 0){
+        if (newCoordinate.y - this->y > 0) {
             i++;
-        } else{
+        } else {
             i--;
         }
     }
-    if (!testCheck){
+    if (!testCheck) {
         isMoved = true;
     }
-    return finalMove(whiteFigure, blackFigure, newCoordinate,testCheck);
+    return finalMove(whiteFigure, blackFigure, newCoordinate, testCheck);
 }
 
 king::king(bool isWhite) {
     chessFigureSprite.setTexture(figuresTextures);
     this->isWhite = isWhite;
-    if (!isWhite){
-        chessFigureSprite.setTextureRect(sf::IntRect(56 * 4,0,56,56));
-    } else{
-        chessFigureSprite.setTextureRect(sf::IntRect(56 * 4,56,56,56));
+    if (!isWhite) {
+        chessFigureSprite.setTextureRect(sf::IntRect(56 * 4, 0, 56, 56));
+    } else {
+        chessFigureSprite.setTextureRect(sf::IntRect(56 * 4, 56, 56, 56));
     }
 }
 
 int king::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackFigure, sf::Vector2i newCoordinate,
                bool testCheck) {
-    if (isWhite){
+    if (newCoordinate.y == this->y && newCoordinate.x == this->x) {
+        return 1;
+    }
+    if (isWhite) {
         dropAsile(blackFigure);
-    } else{
+    } else {
         dropAsile(whiteFigure);
     }
 
@@ -402,121 +442,126 @@ int king::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackF
     auto blackEnemy = blackFigure.begin();
     bool blackEnemyFind = false;
     bool whiteEnemyFind = false;
-    for(auto it = whiteFigure.begin(); it != whiteFigure.end(); it++){
-        if ((*it)->getY() == newCoordinate.y && (*it)->getX() == newCoordinate.x){
+    for (auto it = whiteFigure.begin(); it != whiteFigure.end(); it++) {
+        if ((*it)->getY() == newCoordinate.y && (*it)->getX() == newCoordinate.x) {
             whiteEnemy = it;
             whiteEnemyFind = true;
             break;
         }
     }
-    for(auto it = blackFigure.begin(); it != blackFigure.end(); it++){
-        if ((*it)->getY() == newCoordinate.y && (*it)->getX() == newCoordinate.x){
+    for (auto it = blackFigure.begin(); it != blackFigure.end(); it++) {
+        if ((*it)->getY() == newCoordinate.y && (*it)->getX() == newCoordinate.x) {
             blackEnemy = it;
             blackEnemyFind = true;
             break;
         }
     }
     //Castiling
-    if (isWhite && whiteEnemyFind && !isMoved){
-        rook * isRook = dynamic_cast<rook*>((*whiteEnemy));
-        if (isRook && !isRook->isMoved){
+    if (isWhite && whiteEnemyFind && !isMoved) {
+        rook *isRook = dynamic_cast<rook *>((*whiteEnemy));
+        if (isRook && !isRook->isMoved) {
             int checkX = this->x;
-            while (checkX != isRook->getX()){
-                for (auto & it : whiteFigure) {
-                    if (it->getX() == checkX && it->getY() == this->y){
+            while (checkX != isRook->getX()) {
+                for (auto &it: whiteFigure) {
+                    if (it->getX() == checkX && it->getY() == this->y) {
 //                            delete isRook;
                         return 1;
                     }
                 }
-                for (auto & it : blackFigure) {
-                    if (it->getX() == checkX && it->getY() == this->y){
+                for (auto &it: blackFigure) {
+                    if (it->getX() == checkX && it->getY() == this->y) {
 //                            delete isRook;
                         return 1;
                     }
                 }
-                if (checkX - isRook->getX() < 0){
+                if (checkX - isRook->getX() < 0) {
                     checkX++;
-                }else if(checkX - isRook->getX() > 0){
+                } else if (checkX - isRook->getX() > 0) {
                     checkX--;
                 }
             }
-            if (testCheck){
+            if (testCheck) {
                 return 0;
             }
-            if (this->x - isRook->getX() < 0){
+            if (this->x - isRook->getX() < 0) {
                 this->setCoordinate(sf::Vector2i(6, this->y));
-                isRook->setCoordinate(sf::Vector2i(5,isRook->getY()));
+                isRook->setCoordinate(sf::Vector2i(5, isRook->getY()));
                 this->isMoved = true;
                 isRook->isMoved = true;
                 return 2;
-            } else{
+            } else {
                 this->setCoordinate(sf::Vector2i(2, this->y));
-                isRook->setCoordinate(sf::Vector2i(3,isRook->getY()));
+                isRook->setCoordinate(sf::Vector2i(3, isRook->getY()));
                 this->isMoved = true;
                 isRook->isMoved = true;
                 return 2;
             }
-        } else{
+        } else {
             return 1;
         }
-    }else if(!isWhite && blackEnemyFind && !isMoved){
-        rook * isRook = dynamic_cast<rook*>((*blackEnemy));
-        if (isRook && !isRook->isMoved){
+    } else if (!isWhite && blackEnemyFind && !isMoved) {
+        rook *isRook = dynamic_cast<rook *>((*blackEnemy));
+        if (isRook && !isRook->isMoved) {
             int checkX = this->x;
-            while (checkX != isRook->getX()){
-                for (auto & it : whiteFigure) {
-                    if (it->getX() == checkX && it->getY() == this->y){
+            while (checkX != isRook->getX()) {
+                for (auto &it: whiteFigure) {
+                    if (it->getX() == checkX && it->getY() == this->y) {
                         return 1;
                     }
                 }
-                for (auto & it : blackFigure) {
-                    if (it->getX() == checkX && it->getY() == this->y){
+                for (auto &it: blackFigure) {
+                    if (it->getX() == checkX && it->getY() == this->y) {
                         return 1;
                     }
                 }
-                if (checkX - isRook->getX() < 0){
+                if (checkX - isRook->getX() < 0) {
                     checkX++;
-                }else if(checkX - isRook->getX() > 0){
+                } else if (checkX - isRook->getX() > 0) {
                     checkX--;
                 }
             }
-            if (testCheck){
+            if (testCheck) {
                 return 0;
             }
-            if (this->x - isRook->getX() < 0){
+            if (this->x - isRook->getX() < 0) {
                 this->setCoordinate(sf::Vector2i(6, this->y));
-                isRook->setCoordinate(sf::Vector2i(5,isRook->getY()));
+                isRook->setCoordinate(sf::Vector2i(5, isRook->getY()));
                 this->isMoved = true;
                 isRook->isMoved = true;
                 return 2;
-            } else{
+            } else {
                 this->setCoordinate(sf::Vector2i(2, this->y));
-                isRook->setCoordinate(sf::Vector2i(3,isRook->getY()));
+                isRook->setCoordinate(sf::Vector2i(3, isRook->getY()));
                 this->isMoved = true;
                 isRook->isMoved = true;
                 return 2;
             }
-        } else{
+        } else {
             return 1;
         }
     }
     //Check on possible move
-    if (abs(newCoordinate.x - this->x) > 1 || abs(newCoordinate.y - this->y) > 1){
+
+    if (newCoordinate.x > 7 || newCoordinate.y > 7 || newCoordinate.x < 0 || newCoordinate.y < 0) {
         return 1;
     }
-    if ((isWhite && whiteEnemyFind) || (!isWhite && blackEnemyFind)){
+
+    if (abs(newCoordinate.x - this->x) > 1 || abs(newCoordinate.y - this->y) > 1) {
+        return 1;
+    }
+    if ((isWhite && whiteEnemyFind) || (!isWhite && blackEnemyFind)) {
         return 1;
     }
     sf::Vector2i oldPosition(this->x, this->y);
     this->setCoordinate(newCoordinate);
-    if (isWhite && blackEnemyFind){
+    if (isWhite && blackEnemyFind) {
         whiteFigure.push_back(this);
-        figure* blackEnemyPointer = (*blackEnemy);
+        figure *blackEnemyPointer = (*blackEnemy);
         blackFigure.erase(blackEnemy);
-        for(int i = 0; i < blackFigure.size(); i++){
+        for (int i = 0; i < blackFigure.size(); i++) {
             figure *checkingFigure = blackFigure[0];
             blackFigure.erase(blackFigure.begin());
-            if(!checkingFigure->move(whiteFigure,blackFigure,newCoordinate, true)){
+            if (!checkingFigure->move(whiteFigure, blackFigure, newCoordinate, true)) {
                 blackFigure.push_back(blackEnemyPointer);
                 whiteFigure.pop_back();
                 this->setCoordinate(oldPosition);
@@ -525,18 +570,19 @@ int king::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackF
             }
             blackFigure.push_back(checkingFigure);
         }
-        if (testCheck){
+        if (testCheck) {
             blackFigure.push_back(blackEnemyPointer);
         }
-        whiteFigure.pop_back();
-    } else if (!isWhite && whiteEnemyFind){
+        deleteSelfFromVector(whiteFigure, blackFigure);
+    } else if (!isWhite && whiteEnemyFind) {
         blackFigure.push_back(this);
+        figure *enemy = (*whiteEnemy);
         whiteFigure.erase(whiteEnemy);
-        for(int i = 0; i < whiteFigure.size(); i++){
+        for (int i = 0; i < whiteFigure.size(); i++) {
             figure *checkingFigure = whiteFigure[0];
             whiteFigure.erase(whiteFigure.begin());
-            if(!checkingFigure->move(whiteFigure,blackFigure,newCoordinate, true)){
-                whiteFigure.push_back((*whiteEnemy));
+            if (!checkingFigure->move(whiteFigure, blackFigure, newCoordinate, true)) {
+                whiteFigure.push_back(enemy);
                 blackFigure.pop_back();
                 this->setCoordinate(oldPosition);
                 whiteFigure.push_back(checkingFigure);
@@ -544,17 +590,17 @@ int king::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackF
             }
             whiteFigure.push_back(checkingFigure);
         }
-        if (testCheck){
+        if (testCheck) {
             whiteFigure.push_back(*whiteEnemy);
         }
-        blackFigure.pop_back();
-    } else if (!blackEnemyFind && !whiteEnemyFind){
-        if (isWhite){
+        deleteSelfFromVector(whiteFigure, blackFigure);
+    } else if (!blackEnemyFind && !whiteEnemyFind) {
+        if (isWhite) {
             whiteFigure.push_back(this);
-            for(int i = 0; i < blackFigure.size(); i++){
+            for (int i = 0; i < blackFigure.size(); i++) {
                 figure *checkingFigure = blackFigure[0];
                 blackFigure.erase(blackFigure.begin());
-                if(!checkingFigure->move(whiteFigure,blackFigure,newCoordinate, true)){
+                if (!checkingFigure->move(whiteFigure, blackFigure, newCoordinate, true)) {
                     whiteFigure.pop_back();
                     blackFigure.push_back(checkingFigure);
                     this->setCoordinate(oldPosition);
@@ -562,13 +608,13 @@ int king::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackF
                 }
                 blackFigure.push_back(checkingFigure);
             }
-            whiteFigure.pop_back();
-        } else{
+            deleteSelfFromVector(whiteFigure, blackFigure);
+        } else {
             blackFigure.push_back(this);
-            for(int i = 0; i < whiteFigure.size(); i++){
+            for (int i = 0; i < whiteFigure.size(); i++) {
                 figure *checkingFigure = whiteFigure[0];
                 whiteFigure.erase(whiteFigure.begin());
-                if(!checkingFigure->move(whiteFigure,blackFigure,newCoordinate, true)){
+                if (!checkingFigure->move(whiteFigure, blackFigure, newCoordinate, true)) {
                     blackFigure.pop_back();
                     this->setCoordinate(oldPosition);
                     whiteFigure.push_back(checkingFigure);
@@ -576,24 +622,45 @@ int king::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackF
                 }
                 whiteFigure.push_back(checkingFigure);
             }
-            blackFigure.pop_back();
+            deleteSelfFromVector(whiteFigure, blackFigure);
         }
     }
 
     this->setCoordinate(oldPosition);
-    if (!testCheck){
+    if (!testCheck) {
         isMoved = true;
     }
-    return finalMove(whiteFigure,blackFigure,newCoordinate,testCheck);
+    return finalMove(whiteFigure, blackFigure, newCoordinate, testCheck);
 }
+
+void king::deleteSelfFromVector(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackFigure) {
+    if (isWhite) {
+        auto it = whiteFigure.begin();
+        for (; it != whiteFigure.end(); it++) {
+            if ((*it) == this) {
+                whiteFigure.erase(it);
+                break;
+            }
+        }
+    } else {
+        auto it = blackFigure.begin();
+        for (; it != blackFigure.end(); it++) {
+            if ((*it) == this) {
+                blackFigure.erase(it);
+                break;
+            }
+        }
+    }
+}
+
 
 queen::queen(bool isWhite) {
     chessFigureSprite.setTexture(figuresTextures);
     this->isWhite = isWhite;
-    if (!isWhite){
-        chessFigureSprite.setTextureRect(sf::IntRect(56 * 3,0,56,56));
-    } else{
-        chessFigureSprite.setTextureRect(sf::IntRect(56 * 3,56,56,56));
+    if (!isWhite) {
+        chessFigureSprite.setTextureRect(sf::IntRect(56 * 3, 0, 56, 56));
+    } else {
+        chessFigureSprite.setTextureRect(sf::IntRect(56 * 3, 56, 56, 56));
     }
     bishopForCheckMove = new bishop(isWhite);
     rookForMove = new rook(isWhite);
@@ -601,19 +668,22 @@ queen::queen(bool isWhite) {
 
 int queen::move(std::vector<figure *> &whiteFigure, std::vector<figure *> &blackFigure, sf::Vector2i newCoordinate,
                 bool testCheck) {
-    if (isWhite){
+    if (newCoordinate.y == this->y && newCoordinate.x == this->x) {
+        return 1;
+    }
+    if (isWhite) {
         dropAsile(blackFigure);
-    } else{
+    } else {
         dropAsile(whiteFigure);
     }
     bishopForCheckMove->setX(this->x);
     bishopForCheckMove->setY(this->y);
     rookForMove->setX(this->x);
     rookForMove->setY(this->y);
-    if (!bishopForCheckMove->move(whiteFigure,blackFigure,newCoordinate,testCheck) ||
-                !rookForMove->move(whiteFigure,blackFigure,newCoordinate,testCheck)){
+    if (!bishopForCheckMove->move(whiteFigure, blackFigure, newCoordinate, testCheck) ||
+        !rookForMove->move(whiteFigure, blackFigure, newCoordinate, testCheck)) {
         return 0;
-    } else{
+    } else {
         return 1;
     }
 }
