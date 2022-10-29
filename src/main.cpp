@@ -196,10 +196,14 @@ int main() {
     while (window.isOpen()) {
         sf::Vector2i pos = sf::Mouse::getPosition(window) - sf::Vector2i(28, 28);
         sf::Event event{};
-        while (window.pollEvent(event)) {
 
+        while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
+            }
+            if (board.blackFigure.size() == 1 && board.whiteFigure.size() == 1){
+                currentStateOfBoard = stalemate;
+                break;
             }
             if (currentStateOfBoard == boardStatements::mat) {
                 break;
@@ -347,6 +351,7 @@ int main() {
                 }
                 break;
             case stalemate:
+                whoMove.setString("Stalemate");
                 break;
         }
         window.clear();
